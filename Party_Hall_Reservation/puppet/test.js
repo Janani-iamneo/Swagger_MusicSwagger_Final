@@ -19,7 +19,7 @@ const puppeteer = require('puppeteer');
         return thElements.map(th => th.textContent.trim());
       });
     // console.log(headers);
-      if (headers[0] === 'Vehicle ID' && headers[1] === 'Make' && headers[2] === 'Model' && headers[3] ==='Availability'){
+      if (headers[0] === 'Vehicle ID' && headers[1] === 'Make' && headers[2] === 'Model' && headers[3] ==='Year'){
         const rowCount = await page.$$eval('table tbody tr', rows => rows.length);
     // console.log(rowCount);
         if (rowCount > 0) {      
@@ -51,15 +51,15 @@ const puppeteer = require('puppeteer');
       await page2.waitForSelector('#durationInMinutes', { timeout: 2000 });
       const Message = await page2.$eval('h1', element => element.textContent.toLowerCase());
       // console.log("Message",Message);
-    if(Message.includes("make a reservation")&&urlAfterClick.toLowerCase().includes('/booking/book'))
+    if(Message.includes("book a test ride")&&urlAfterClick.toLowerCase().includes('/booking/book'))
     {
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:success');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Test_Ride_Booking_page_and_Presence_of_Name_Email_Phone_Elements:success');
     }    
     else{
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Test_Ride_Booking_page_and_Presence_of_Name_Email_Phone_Elements:failure');
     }
     } catch (e) {
-      console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:failure');
+      console.log('TESTCASE:Check_Successful_Navigation_to_Test_Ride_Booking_page_and_Presence_of_Name_Email_Phone_Elements:failure');
     } 
 
 
@@ -80,17 +80,17 @@ const puppeteer = require('puppeteer');
       await page3.waitForSelector('#cancel', { timeout: 2000 });
       const Message1 = await page3.$eval('h1', element => element.textContent.toLowerCase());
       // console.log("Message", Message1);
-    if(Message1.includes("delete party hall") && urlAfterClick.toLowerCase().includes('/partyhall/delete'))
+    if(Message1.includes("delete vehicle") && urlAfterClick.toLowerCase().includes('/vehicle/delete'))
     {
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:success');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:success');
     }    
     else{
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
     }
 
     }
   catch(e){
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
   }
   
   finally{
