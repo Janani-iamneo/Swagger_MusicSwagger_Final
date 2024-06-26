@@ -1,0 +1,58 @@
+@model List<PartyHall>
+
+<h1>Party Hall Reservation</h1>
+
+<!-- Display message if TempData["Message"] is not null -->
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+<!-- Add search form -->
+<form asp-action="Search" asp-controller="PartyHall" method="get">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search by name..." name="name">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Party Hall ID</th>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Availability</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var partyHall in Model)
+        {
+            <tr>
+                <td>@partyHall.PartyHallID</td>
+                <td>@partyHall.Name</td>
+                <td>@partyHall.Capacity</td>
+                <td>
+                    @if (partyHall.Availability)
+                    {
+                        <span class="text-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">In Maintenance</span>
+                    }
+                </td>
+                <td>
+                    @if (partyHall.Availability)
+                    {
+                        <a id="bookButton" href="@Url.Action("Book","Booking", new { PartyHallID = partyHall.PartyHallID })" class="btn btn-primary">Book</a>
+                    }
+                    <a id = "delete" asp-action="Delete" asp-route-partyHallId="@partyHall.PartyHallID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
