@@ -23,7 +23,7 @@ namespace dotnetapp.Controllers
 
         public IActionResult Delete(int petId)
         {
-            var pet = _dbContext.Pets.FirstOrDefault(p => p.PartyHallID == petId);
+            var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
             if (pet == null)
             {
                 return NotFound();
@@ -36,7 +36,7 @@ namespace dotnetapp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int petId)
         {
-            var pet = _dbContext.Pets.FirstOrDefault(p => p.PartyHallID == petId);
+            var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
             if (pet == null)
             {
                 return NotFound();
@@ -47,33 +47,33 @@ namespace dotnetapp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         public IActionResult Search(string name)
-{
-    if (string.IsNullOrEmpty(name))
-    {
-        // Handle case where name is null or empty
-        return RedirectToAction(nameof(Index));
-    }
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                // Handle case where name is null or empty
+                return RedirectToAction(nameof(Index));
+            }
 
-    // Convert search string to lower case for case-insensitive comparison
-    var lowerName = name.ToLower();
+            // Convert search string to lower case for case-insensitive comparison
+            var lowerName = name.ToLower();
 
-    var pets = _dbContext.Pets                                                              
-        .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%")) // Using EF.Functions.Like for wildcard search
-        .ToList();
+            var pets = _dbContext.Pets
+                .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%")) // Using EF.Functions.Like for wildcard search
+                .ToList();
 
-    // Check if any party hall names exactly match the search string
-    var exactMatch = pets.FirstOrDefault(p => p.Name.ToLower() == lowerName);
+            // Check if any pet names exactly match the search string
+            var exactMatch = pets.FirstOrDefault(p => p.Name.ToLower() == lowerName);
 
-    if (exactMatch == null)
-    {
-        // Handle case where no exact match is found
-        TempData["Message"] = $"No party hall found matching '{name}'.";
-        return RedirectToAction(nameof(Index));
-    }
+            if (exactMatch == null)
+            {
+                // Handle case where no exact match is found
+                TempData["Message"] = $"No pet found matching '{name}'.";
+                return RedirectToAction(nameof(Index));
+            }
 
-    return View(nameof(Index), pets);
-}
-
+            return View(nameof(Index), pets);
+        }
     }
 }
