@@ -21,6 +21,16 @@
         @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", id = "adopterPhone"})
         @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
     </div>
+    <div style="margin-bottom: 15px;">
+        <label for="adopterAddress" style="font-weight: bold;">Your Address:</label>
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", id = "adopterAddress"})
+        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label for="isApproved" style="font-weight: bold;">Approval Status:</label>
+        @Html.CheckBoxFor(model => model.IsApproved, new { @class = "form-control", id = "isApproved" })
+        @Html.ValidationMessageFor(model => model.IsApproved, "", new { @class = "text-danger" })
+    </div>
 
     <button id="submit" type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 8px 16px; cursor: pointer;">Adopt</button>
 }
