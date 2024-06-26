@@ -3,9 +3,9 @@ using System;
 namespace dotnetapp.Exceptions
 {
 
-public class PartyHallBookingException : Exception
+public class PetAdoptionException : Exception
 {
-    public PartyHallBookingException(string message) : base(message)
+    public PetAdoptionException(string message) : base(message)
     {
     }
 }

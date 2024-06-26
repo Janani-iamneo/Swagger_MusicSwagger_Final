@@ -10,25 +10,25 @@ namespace dotnetapp.Data
         }
         
         public DbSet<Pet> Pets { get; set; }
-        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<PetAdopter> PetAdopters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Define the relationship between PartyHall and Booking classes - one-to-many
-            modelBuilder.Entity<PartyHall>()
-                .HasMany(p => p.Bookings)
-                .WithOne(b => b.PartyHall)
-                .HasForeignKey(b => b.PartyHallID);
-
             base.OnModelCreating(modelBuilder);
 
-            // Seed data for PartyHalls
-            modelBuilder.Entity<PartyHall>().HasData(
-                new PartyHall { PartyHallID = 1, Name = "Elegant Banquet Hall", Capacity = 100, Availability = true },
-                new PartyHall { PartyHallID = 2, Name = "Cozy Party Room", Capacity = 50, Availability = true },
-                new PartyHall { PartyHallID = 3, Name = "Grand Celebration Hall", Capacity = 200, Availability = true },
-                new PartyHall { PartyHallID = 4, Name = "Lavish Ballroom", Capacity = 150, Availability = true },
-                new PartyHall { PartyHallID = 5, Name = "Rustic Barn Venue", Capacity = 80, Availability = true }
+            // Define the relationship between Pet and PetAdopter classes - one-to-many
+            modelBuilder.Entity<Pet>()
+                .HasMany(p => p.PetAdopters)
+                .WithOne(pa => pa.Pet)
+                .HasForeignKey(pa => pa.PetID);
+
+            // Seed data for Pets
+            modelBuilder.Entity<Pet>().HasData(
+                new Pet { PetID = 1, Name = "Buddy", Type = "Dog", Age = 3, Availability = true },
+                new Pet { PetID = 2, Name = "Mittens", Type = "Cat", Age = 2, Availability = true },
+                new Pet { PetID = 3, Name = "Tweety", Type = "Bird", Age = 1, Availability = true },
+                new Pet { PetID = 4, Name = "Rocky", Type = "Hamster", Age = 1, Availability = true },
+                new Pet { PetID = 5, Name = "Whiskers", Type = "Rabbit", Age = 2, Availability = true }
             );
         }
     }

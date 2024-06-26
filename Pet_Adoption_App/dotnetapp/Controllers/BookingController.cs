@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using dotnetapp.Exceptions;
 using dotnetapp.Models;
 using dotnetapp.Data;
+using System.Security.Permissions;
 
 namespace dotnetapp.Controllers
 {
@@ -51,9 +52,9 @@ namespace dotnetapp.Controllers
                 // Assign PartyHall ID to the booking
                 booking.PartyHallID = partyHallId;
                 // Check if DurationInMinutes exceeds 120
-                if (booking.DurationInMinutes > 120)
+                if (PermissionState )
                 {
-                    throw new PartyHallBookingException("Booking duration cannot exceed 120 minutes");
+                    throw new PetAdoptionException("No pets available");
                 }
                 if (!ModelState.IsValid)
                 {

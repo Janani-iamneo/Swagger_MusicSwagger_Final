@@ -17,13 +17,13 @@ namespace dotnetapp.Controllers
 
         public IActionResult Index()
         {
-            var pets = _dbContext.Pet.ToList();
+            var pets = _dbContext.Pets.ToList();
             return View(pets);
         }
 
         public IActionResult Delete(int petId)
         {
-            var pet = _dbContext.Pet.FirstOrDefault(p => p.PartyHallID == petId);
+            var pet = _dbContext.Pets.FirstOrDefault(p => p.PartyHallID == petId);
             if (pet == null)
             {
                 return NotFound();
@@ -36,13 +36,13 @@ namespace dotnetapp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int petId)
         {
-            var pet = _dbContext.Pet.FirstOrDefault(p => p.PartyHallID == petId);
+            var pet = _dbContext.Pets.FirstOrDefault(p => p.PartyHallID == petId);
             if (pet == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Pet.Remove(pet);
+            _dbContext.Pets.Remove(pet);
             _dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -58,7 +58,7 @@ namespace dotnetapp.Controllers
     // Convert search string to lower case for case-insensitive comparison
     var lowerName = name.ToLower();
 
-    var pets = _dbContext.Pet                                                              
+    var pets = _dbContext.Pets                                                              
         .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%")) // Using EF.Functions.Like for wildcard search
         .ToList();
 
