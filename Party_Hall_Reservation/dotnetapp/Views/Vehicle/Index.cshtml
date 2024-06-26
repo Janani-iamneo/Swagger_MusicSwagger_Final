@@ -1,6 +1,6 @@
-@model List<PartyHall>
+@model List<dotnetapp.Models.Vehicle>
 
-<h1>Party Hall Reservation</h1>
+<h1>Vehicle Test Ride Booking</h1>
 
 <!-- Display message if TempData["Message"] is not null -->
 @if (TempData["Message"] != null)
@@ -9,9 +9,9 @@
 }
 
 <!-- Add search form -->
-<form asp-action="Search" asp-controller="PartyHall" method="get">
+<form asp-action="Search" asp-controller="Vehicle" method="get">
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by name..." name="name">
+        <input type="text" class="form-control" placeholder="Search by make..." name="make">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
@@ -21,22 +21,24 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Party Hall ID</th>
-            <th>Name</th>
-            <th>Capacity</th>
+            <th>Vehicle ID</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
             <th>Availability</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var partyHall in Model)
+        @foreach (var vehicle in Model)
         {
             <tr>
-                <td>@partyHall.PartyHallID</td>
-                <td>@partyHall.Name</td>
-                <td>@partyHall.Capacity</td>
+                <td>@vehicle.VehicleID</td>
+                <td>@vehicle.Make</td>
+                <td>@vehicle.Model</td>
+                <td>@vehicle.Year</td>
                 <td>
-                    @if (partyHall.Availability)
+                    @if (vehicle.Availability)
                     {
                         <span class="text-success">Available</span>
                     }
@@ -46,11 +48,11 @@
                     }
                 </td>
                 <td>
-                    @if (partyHall.Availability)
+                    @if (vehicle.Availability)
                     {
-                        <a id="bookButton" href="@Url.Action("Book","Booking", new { PartyHallID = partyHall.PartyHallID })" class="btn btn-primary">Book</a>
+                        <a id="bookButton" href="@Url.Action("Book","Booking", new { vehicleId = vehicle.VehicleID })" class="btn btn-primary">Book</a>
                     }
-                    <a id = "delete" asp-action="Delete" asp-route-partyHallId="@partyHall.PartyHallID" class="btn btn-danger">Delete</a>
+                    <a id="delete" asp-action="Delete" asp-route-vehicleId="@vehicle.VehicleID" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

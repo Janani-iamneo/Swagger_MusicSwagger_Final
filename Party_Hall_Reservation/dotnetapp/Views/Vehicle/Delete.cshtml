@@ -1,0 +1,10 @@
+@model dotnetapp.Models.Vehicle
+
+<h1>Delete Vehicle</h1>
+
+<p>Are you sure you want to delete the vehicle '@Model.Make @Model.Model'?</p>
+
+<form method="post">
+    <input type="submit" id="delete" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" id="cancel" class="btn btn-secondary">Cancel</a>
+</form>

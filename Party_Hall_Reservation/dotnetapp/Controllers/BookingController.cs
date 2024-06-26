@@ -52,7 +52,7 @@ namespace dotnetapp.Controllers
                 // Check if DurationInMinutes exceeds 120
                 if (booking.DurationInMinutes > 120)
                 {
-                    throw new Exception("Booking duration cannot exceed 120 minutes");
+                    throw new TestDriveBookingException("Booking duration cannot exceed 120 minutes");
                 }
 
                 if (!ModelState.IsValid)

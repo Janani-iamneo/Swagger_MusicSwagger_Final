@@ -1,12 +1,12 @@
 @model dotnetapp.Models.Booking
 
 @{
-    var partyHallId = Context.Request.Query["partyHallId"];
+    var vehicleId = Context.Request.Query["vehicleId"];
 }
 
-<h1>Make a Reservation</h1>
+<h1>Book a Test Ride</h1>
 
-<h2>Selected Party Hall: @partyHallId</h2>
+<h2>Selected Vehicle ID: @vehicleId</h2>
 
 @using (Html.BeginForm())
 {
@@ -29,6 +29,5 @@
     <button id="submit" type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 8px 16px; cursor: pointer;">Submit</button>
 }
 
-<a id="backtopartyhall" href="@Url.Action("Index", "PartyHall")">Back to Party Hall Reservations</a>
+<a id="backtovehicle" href="@Url.Action("Index", "Vehicle")">Back to Vehicle Listings</a>
 <br>
-
