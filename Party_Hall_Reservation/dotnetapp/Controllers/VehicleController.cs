@@ -48,32 +48,48 @@ namespace dotnetapp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Search(string make)
+        // public IActionResult Search(string make)
+        // {
+        //     if (string.IsNullOrEmpty(make))
+        //     {
+        //         // Handle case where make is null or empty
+        //         return RedirectToAction(nameof(Index));
+        //     }
+
+        //     // Convert search string to lower case for case-insensitive comparison
+        //     var lowerMake = make.ToLower();
+
+        //     var vehicles = _dbContext.Vehicles                                                              
+        //         .Where(v => EF.Functions.Like(v.Make.ToLower(), "%" + lowerMake + "%")) // Using EF.Functions.Like for wildcard search
+        //         .ToList();
+
+        //     // Check if any vehicle makes exactly match the search string
+        //     var exactMatch = vehicles.FirstOrDefault(v => v.Make.ToLower() == lowerMake);
+
+        //     if (exactMatch == null)
+        //     {
+        //         // Handle case where no exact match is found
+        //         TempData["Message"] = $"No vehicle found matching '{make}'.";
+        //         return RedirectToAction(nameof(Index));
+        //     }
+
+        //     return View(nameof(Index), vehicles);
+        // }
+
+        public IActionResult FilterByYear(int year)
         {
-            if (string.IsNullOrEmpty(make))
-            {
-                // Handle case where make is null or empty
-                return RedirectToAction(nameof(Index));
-            }
-
-            // Convert search string to lower case for case-insensitive comparison
-            var lowerMake = make.ToLower();
-
-            var vehicles = _dbContext.Vehicles                                                              
-                .Where(v => EF.Functions.Like(v.Make.ToLower(), "%" + lowerMake + "%")) // Using EF.Functions.Like for wildcard search
+            var vehicles = _dbContext.Vehicles
+                .Where(v => v.Year == year)
                 .ToList();
 
-            // Check if any vehicle makes exactly match the search string
-            var exactMatch = vehicles.FirstOrDefault(v => v.Make.ToLower() == lowerMake);
-
-            if (exactMatch == null)
+            if (vehicles.Count == 0)
             {
-                // Handle case where no exact match is found
-                TempData["Message"] = $"No vehicle found matching '{make}'.";
+                TempData["Message"] = $"No vehicles found manufactured in {year}.";
                 return RedirectToAction(nameof(Index));
             }
 
             return View(nameof(Index), vehicles);
         }
+
     }
 }

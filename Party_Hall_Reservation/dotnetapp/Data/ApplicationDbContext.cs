@@ -27,8 +27,8 @@ namespace dotnetapp.Data
                 new Vehicle { VehicleID = 1, Make = "Tesla", Model = "Model S", Year = 2024, Availability = true },
                 new Vehicle { VehicleID = 2, Make = "Ford", Model = "Mustang", Year = 2024, Availability = true },
                 new Vehicle { VehicleID = 3, Make = "Chevrolet", Model = "Camaro", Year = 2024, Availability = false },
-                new Vehicle { VehicleID = 4, Make = "BMW", Model = "M3", Year = 2024, Availability = true },
-                new Vehicle { VehicleID = 5, Make = "Audi", Model = "A4", Year = 2014, Availability = true }
+                new Vehicle { VehicleID = 4, Make = "BMW", Model = "M3", Year = 2022, Availability = true },
+                new Vehicle { VehicleID = 5, Make = "Audi", Model = "A4", Year = 2023, Availability = true }
             );
         }
     }

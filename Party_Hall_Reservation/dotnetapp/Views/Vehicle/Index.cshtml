@@ -8,12 +8,12 @@
     <div class="alert alert-info">@TempData["Message"]</div>
 }
 
-<!-- Add search form -->
-<form asp-action="Search" asp-controller="Vehicle" method="get">
+<!-- Search form for filtering by year -->
+<form asp-action="FilterByYear" asp-controller="Vehicle" method="get">
     <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by make..." name="make">
+        <input type="number" class="form-control" placeholder="Filter by year..." name="year">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit">Search</button>
+            <button class="btn btn-outline-secondary" type="submit">Filter</button>
         </div>
     </div>
 </form>
@@ -44,7 +44,7 @@
                     }
                     else
                     {
-                        <span class="text-danger">In Maintenance</span>
+                        <span class="text-danger">Out of Stock</span>
                     }
                 </td>
                 <td>
