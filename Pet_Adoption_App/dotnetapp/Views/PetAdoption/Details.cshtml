@@ -1,10 +1,11 @@
-@model dotnetapp.Models.Booking
+@model dotnetapp.Models.PetAdopter
 
-<h1>Reservation Details</h1>
-<p>Booking ID: @Model.BookingID</p>
-<p>Party Hall ID: @Model.PartyHallID</p>
-<p>Customer Name: @Model.CustomerName</p>
-<p>Contact Number: @Model.ContactNumber</p>
-<p>Duration (in minutes): @Model.DurationInMinutes</p>
+<h1>Adopter Details</h1>
+<p>Adopter ID: @Model.PetAdopterID</p>
+<p>Name: @Model.Name</p>
+<p>Email: @Model.Email</p>
+<p>Phone Number: @Model.PhoneNumber</p>
+<p>Address: @Model.Address</p>
+<p>Approval Status: @Model.IsApproved ? "Approved" : "Not Approved"</p>
 
-<a href="@Url.Action("Index", "PartyHall")">Back to Party Hall Reservations</a><br>
+<a href="@Url.Action("Index", "Pet")">Back to Pet Adoption Listings</a><br>
