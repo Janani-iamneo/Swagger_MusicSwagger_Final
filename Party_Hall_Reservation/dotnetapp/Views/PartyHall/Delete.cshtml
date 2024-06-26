@@ -1,0 +1,10 @@
+@model dotnetapp.Models.PartyHall
+
+<h1>Delete Party Hall</h1>
+
+<p>Are you sure you want to delete party hall '@Model.Name'?</p>
+
+<form method="post">
+    <input type="submit" id = "delete" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" id = "cancel" class="btn btn-secondary">Cancel</a>
+</form>
