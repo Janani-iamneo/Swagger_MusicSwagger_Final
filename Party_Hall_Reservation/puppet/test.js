@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
     const page = await browser.newPage();
     try{
       // await page.goto('https://api.example.com/');
-      await page.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page.setViewport({
         width:1200,
         height:1200,
@@ -19,7 +19,7 @@ const puppeteer = require('puppeteer');
         return thElements.map(th => th.textContent.trim());
       });
     // console.log(headers);
-      if (headers[0] === 'Party Hall ID' && headers[1] === 'Name' && headers[2] === 'Capacity' && headers[3] ==='Availability'){
+      if (headers[0] === 'Vehicle ID' && headers[1] === 'Make' && headers[2] === 'Model' && headers[3] ==='Availability'){
         const rowCount = await page.$$eval('table tbody tr', rows => rows.length);
     // console.log(rowCount);
         if (rowCount > 0) {      
@@ -38,7 +38,7 @@ const puppeteer = require('puppeteer');
 
     const page2 = await browser.newPage();
     try {
-      await page2.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page2.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page2.setViewport({
         width: 1200,
         height: 1200,
@@ -66,7 +66,7 @@ const puppeteer = require('puppeteer');
   const page3 = await browser.newPage();
 
     try {        
-      await page3.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page3.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page3.setViewport({
         width: 1200,
         height: 800,

@@ -41,7 +41,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
 
@@ -70,7 +70,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "1234567890", DurationInMinutes = 60 };
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
@@ -108,7 +108,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
 
@@ -125,7 +125,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
 
@@ -154,7 +154,7 @@ namespace dotnetapp.Tests
         public void VehicleController_Index_ReturnsViewWithVehicleList()
         {
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1",Model = "Model 1", Availability = true };
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
 
@@ -172,7 +172,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 130 }; // Set duration to 130 minutes
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
@@ -192,7 +192,7 @@ namespace dotnetapp.Tests
         {
             // Arrange
             var vehicleId = 1;
-            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Availability = true };
+            var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
             // Create a booking with duration exceeding 120 minutes
             var booking1 = new Booking { DurationInMinutes = 180 }; // Set duration to 180 minutes 
 
@@ -377,31 +377,31 @@ namespace dotnetapp.Tests
             Assert.That(vehicle.Availability, Is.TypeOf<bool>());
         }
 
-        // [Test]
-        // public void Search_Matches_Exactly_ReturnsMatchingVehicle()
-        // {
-        //     // Arrange
-        //     var vehicles = new List<Vehicle>
-        //     {
-        //         new Vehicle { VehicleID = 1, Make = "SUV", Availability = true },
-        //         new Vehicle { VehicleID = 2, Make = "Sedan", Availability = true },
-        //         new Vehicle { VehicleID = 3, Make = "Hatchback", Availability = true },
-        //         new Vehicle { VehicleID = 4, Make = "Convertible", Availability = true },
-        //         new Vehicle { VehicleID = 5, Make = "Pickup Truck", Availability = true }
-        //     };
-        //     _dbContext.Vehicles.AddRange(vehicles);
-        //     _dbContext.SaveChanges();
+        [Test]
+        public void FilterByYear_Matches_Exactly_ReturnsMatchingVehicle()
+        {
+            // Arrange
+            var vehicles = new List<Vehicle>
+            {
+                new Vehicle { VehicleID = 1, Make = "SUV", Year = 2022, Model = "Model 1", Availability = true },
+                new Vehicle { VehicleID = 2, Make = "Sedan", Year = 2020, Model = "Model 2", Availability = true },
+                new Vehicle { VehicleID = 3, Make = "Hatchback", Year = 2021, Model = "Model 3", Availability = true },
+                new Vehicle { VehicleID = 4, Make = "Convertible", Year = 2022, Model = "Model 4", Availability = true },
+                new Vehicle { VehicleID = 5, Make = "Pickup Truck", Year = 2020, Model = "Model 5", Availability = true }
+            };
+            _dbContext.Vehicles.AddRange(vehicles);
+            _dbContext.SaveChanges();
 
-        //     // Act
-        //     var result = _vehicleController.Search("Sedan") as ViewResult;
-        //     var model = result.Model as List<Vehicle>;
+            // Act
+            var result = _vehicleController.FilterByYear(2020) as ViewResult;
+            var model = result.Model as List<Vehicle>;
 
-        //     // Assert
-        //     Assert.IsNotNull(result);
-        //     Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
-        //     Assert.IsNotNull(model); // Ensure the model is not null
-        //     Assert.AreEqual(1, model.Count); // Ensure exactly one vehicle is returned
-        //     Assert.AreEqual("Sedan", model[0].Make); // Check that the returned vehicle matches exactly
-        // }
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
+            Assert.IsNotNull(model); // Ensure the model is not null
+            Assert.AreEqual(2, model.Count); // Ensure exactly two vehicles are returned for the year 2020
+            Assert.IsTrue(model.All(v => v.Year == 2020)); // Check that all returned vehicles match the filtered year (2020)
+        }
     }
 }
