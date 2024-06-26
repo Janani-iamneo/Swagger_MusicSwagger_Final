@@ -1,0 +1,29 @@
+@model dotnetapp.Models.Adopt
+
+<h1>Adopt a Pet</h1>
+
+<h2>Selected Pet: @Model.PetID</h2>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom: 15px;">
+        <label for="adopterName" style="font-weight: bold;">Your Name:</label>
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", id = "adopterName"})
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label for="adopterEmail" style="font-weight: bold;">Your Email:</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", id = "adopterEmail"})
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label for="adopterPhone" style="font-weight: bold;">Your Phone Number:</label>
+        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", id = "adopterPhone"})
+        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+    </div>
+
+    <button id="submit" type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 8px 16px; cursor: pointer;">Adopt</button>
+}
+
+<a id="backtoindex" href="@Url.Action("Index", "Pet")">Back to Pet Adoption Listings</a>
+<br>
