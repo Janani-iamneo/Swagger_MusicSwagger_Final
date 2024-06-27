@@ -54,41 +54,40 @@ namespace dotnetapp.Tests
         // }
 
         [Test]
-        public void PetAdoptionController_Get_Pet_by_InvalidPetId_ReturnsNotFound()
+        public void PetAdoptionController_Get_Details_by_InvalidPetId_ReturnsNotFound()
         {
             // Arrange
             var petId = 1;
 
             // Act
-            var result = _petAdoptionController.Pet(petId) as NotFoundResult;
+            var result = _petAdoptionController.Details(petId) as NotFoundResult;
 
             // Assert
             Assert.IsNotNull(result);
         }
 
-        // [Test]
-        // public void PetAdoptionController_Post_Pet_ValidPetAdoption_Success_Redirects_Details()
-        // {
-        //     // Arrange
-        //     var petId = 1;
-        //     var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-        //     var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", DurationInMinutes = 60 };
-        //     _dbContext.Pets.Add(pet);
-        //     _dbContext.SaveChanges();
+        [Test]
+        public void PetAdoptionController_Post_Pet_ValidPetAdoption_Success_Redirects_Details()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567890", Address = "123 Elm St" };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
 
-        //     // Act
-        //     var result = _petAdoptionController.Pet(petId, petAdoption1) as RedirectToActionResult;
-        //     var petAdoption = _dbContext.PetAdoptions.Include(b => b.Pet).FirstOrDefault();
+            // Act
+            var result = _petAdoptionController.Details(petId, petAdoption1) as RedirectToActionResult;
+            var petAdoption = _dbContext.PetAdoptions.Include(b => b.Pet).FirstOrDefault();
 
-        //     // Assert
-        //     Assert.IsNotNull(result);
-        //     Assert.AreEqual("Details", result.ActionName);
-        //     Assert.IsNotNull(petAdoption);
-        //     Assert.AreEqual(petId, petAdoption.Pet.PetID);
-        //     Assert.AreEqual("John Doe", petAdoption.Name);
-        //     Assert.AreEqual("1234567890", petAdoption.ContactNumber);
-        //     Assert.AreEqual(60, petAdoption.DurationInMinutes);
-        // }
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ActionName);
+            Assert.IsNotNull(petAdoption);
+            Assert.AreEqual(petId, petAdoption.Pet.PetID);
+            Assert.AreEqual("John Doe", petAdoption.Name);
+            Assert.AreEqual("1234567890", petAdoption.PhoneNumber);
+        }
 
         // [Test]
         // public void PetAdoptionController_Post_Pet_by_InvalidPetId_ReturnsNotFound()
