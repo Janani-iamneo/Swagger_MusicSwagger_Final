@@ -53,18 +53,18 @@ namespace dotnetapp.Tests
         //     Assert.IsNotNull(result);
         // }
 
-        // [Test]
-        // public void PetAdoptionController_Get_Pet_by_InvalidPetId_ReturnsNotFound()
-        // {
-        //     // Arrange
-        //     var petId = 1;
+        [Test]
+        public void PetAdoptionController_Get_Pet_by_InvalidPetId_ReturnsNotFound()
+        {
+            // Arrange
+            var petId = 1;
 
-        //     // Act
-        //     var result = _petAdoptionController.Pet(petId) as NotFoundResult;
+            // Act
+            var result = _petAdoptionController.Pet(petId) as NotFoundResult;
 
-        //     // Assert
-        //     Assert.IsNotNull(result);
-        // }
+            // Assert
+            Assert.IsNotNull(result);
+        }
 
         // [Test]
         // public void PetAdoptionController_Post_Pet_ValidPetAdoption_Success_Redirects_Details()
