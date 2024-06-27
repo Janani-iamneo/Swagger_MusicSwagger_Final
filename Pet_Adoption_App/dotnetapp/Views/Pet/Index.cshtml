@@ -47,11 +47,11 @@
                 <td>
                     @if (pet.Availability)
                     {
-                        <a href="@Url.Action("PetAdopter", "PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
+                        <a href="@Url.Action("PetAdoption", "PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
                     }
-                    else if (pet.PetAdopters != null && pet.PetAdopters.Any())
+                    else if (pet.PetAdoptions != null && pet.PetAdoptions.Any())
                     {
-                        <a href="@Url.Action("Details", "PetAdoption", new { adopterId = pet.PetAdopters.First().PetAdopterID })" class="btn btn-info">Details</a>
+                        <a href="@Url.Action("Details", "PetAdoption", new { adopterId = pet.PetAdoptions.First().PetAdoptionID })" class="btn btn-info">Details</a>
                     }
                 </td>
             </tr>

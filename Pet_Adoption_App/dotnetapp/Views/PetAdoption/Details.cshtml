@@ -1,4 +1,8 @@
-@model dotnetapp.Models.PetAdopter
+@model dotnetapp.Models.PetAdoption
+
+@{
+    ViewData["Title"] = "Adopter Details";
+}
 
 <h1>Adopter Details</h1>
 <p>Adopter ID: @Model.PetAdopterID</p>
@@ -6,6 +10,6 @@
 <p>Email: @Model.Email</p>
 <p>Phone Number: @Model.PhoneNumber</p>
 <p>Address: @Model.Address</p>
-@* <p>Approval Status: @Model.IsApproved ? "Approved" : "Not Approved"</p> *@
+<p>Selected Pet: @Model.Pet.Name</p>
 
-<a href="@Url.Action("Index", "Pet")">Back to Pet Adoption Listings</a><br>
+<a href="@Url.Action("Index", "Pet")">Back to Pet Adoption Listings</a>
