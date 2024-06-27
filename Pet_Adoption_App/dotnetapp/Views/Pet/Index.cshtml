@@ -8,14 +8,19 @@
 }
 
 <!-- Add search form -->
-<form asp-action="Search" asp-controller="Pet" method="get">
+@* <form asp-action="Search" asp-controller="Pet" method="get">
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Search by name..." name="name">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
     </div>
+</form> *@
+
+<form asp-action="SortByAge" asp-controller="Pet" method="get">
+    <button class="btn btn-outline-secondary" type="submit">Sort by Age</button>
 </form>
+
 
 <table class="table">
     <thead>

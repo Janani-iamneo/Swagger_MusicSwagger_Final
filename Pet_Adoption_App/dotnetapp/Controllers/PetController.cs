@@ -51,28 +51,34 @@ namespace dotnetapp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Search(string name)
+        // public IActionResult Search(string name)
+        // {
+        //     if (string.IsNullOrEmpty(name))
+        //     {
+        //         return RedirectToAction(nameof(Index));
+        //     }
+
+        //     var lowerName = name.ToLower();
+
+        //     var pets = _dbContext.Pets
+        //         .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%"))
+        //         .ToList();
+
+        //     var exactMatch = pets.FirstOrDefault(p => p.Name.ToLower() == lowerName);
+
+        //     if (exactMatch == null)
+        //     {
+        //         TempData["Message"] = $"No pet found matching '{name}'.";
+        //         return RedirectToAction(nameof(Index));
+        //     }
+
+        //     return View(nameof(Index), pets);
+        // }
+
+        public IActionResult SortByAge()
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
-            var lowerName = name.ToLower();
-
-            var pets = _dbContext.Pets
-                .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%"))
-                .ToList();
-
-            var exactMatch = pets.FirstOrDefault(p => p.Name.ToLower() == lowerName);
-
-            if (exactMatch == null)
-            {
-                TempData["Message"] = $"No pet found matching '{name}'.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(nameof(Index), pets);
+            var pets = _dbContext.Pets.OrderBy(p => p.Age).ToList();
+            return View("Index", pets);
         }
     }
 }
