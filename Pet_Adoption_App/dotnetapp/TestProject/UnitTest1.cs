@@ -1,473 +1,476 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using NUnit.Framework;
-// using dotnetapp.Controllers;
-// using dotnetapp.Models;
-// using dotnetapp.Exceptions;
-// using dotnetapp.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
+using dotnetapp.Controllers;
+using dotnetapp.Models;
+using dotnetapp.Exceptions;
+using dotnetapp.Data;
 
-// namespace dotnetapp.Tests
-// {
-//     [TestFixture]
-//     public class PartyHallBookingControllerTests
-//     {
-//         private ApplicationDbContext _dbContext;
-//         private PartyHallController _partyHallController;
-//         private BookingController _bookingController;
+namespace dotnetapp.Tests
+{
+    [TestFixture]
+    public class PetAdoptionControllerTests
+    {
+        private ApplicationDbContext _dbContext;
+        private PetController _petController;
+        private PetAdoptionController _petAdoptionController;
 
-//         [SetUp]
-//         public void Setup()
-//         {
-//             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-//                 .UseInMemoryDatabase(databaseName: "TestDatabase")
-//                 .Options;
-//             _dbContext = new ApplicationDbContext(options);
-//             _partyHallController = new PartyHallController(_dbContext);
-//             _bookingController = new BookingController(_dbContext);
-//         }
+        [SetUp]
+        public void Setup()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+            _dbContext = new ApplicationDbContext(options);
+            _petController = new PetController(_dbContext);
+            _petAdoptionController = new PetAdoptionController(_dbContext);
+        }
 
-//         [TearDown]
-//         public void TearDown()
-//         {
-//             // Dispose the ApplicationDbContext and reset the database
-//             _dbContext.Database.EnsureDeleted();
-//             _dbContext.Dispose();
-//         }
+        [TearDown]
+        public void TearDown()
+        {
+            // Dispose the ApplicationDbContext and reset the database
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Dispose();
+        }
+
+        [Test]
+        public void PetAdoptionController_Get_Book_by_petId_ReturnsViewResult()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _petAdoptionController.Book(petId) as ViewResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void PetAdoptionController_Get_Book_by_InvalidPetId_ReturnsNotFound()
+        {
+            // Arrange
+            var petId = 1;
+
+            // Act
+            var result = _petAdoptionController.Book(petId) as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void PetAdoptionController_Post_Book_ValidPetAdoption_Success_Redirects_Details()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            var petAdoption1 = new PetAdoption { CustomerName = "John Doe", ContactNumber = "1234567890", DurationInMinutes = 60 };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _petAdoptionController.Book(petId, petAdoption1) as RedirectToActionResult;
+            var petAdoption = _dbContext.PetAdoptions.Include(b => b.Pet).FirstOrDefault();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Details", result.ActionName);
+            Assert.IsNotNull(petAdoption);
+            Assert.AreEqual(petId, petAdoption.Pet.PetID);
+            Assert.AreEqual("John Doe", petAdoption.CustomerName);
+            Assert.AreEqual("1234567890", petAdoption.ContactNumber);
+            Assert.AreEqual(60, petAdoption.DurationInMinutes);
+        }
+
+        [Test]
+        public void PetAdoptionController_Post_Book_by_InvalidPetId_ReturnsNotFound()
+        {
+            // Arrange
+            var petId = 1;
+            var petAdoption1 = new PetAdoption { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 60 };
+
+            // Act
+            var result = _petAdoptionController.Book(petId, petAdoption1) as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void PetController_Delete_ValidPetId_Success_Redirects_Delete()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _petController.DeleteConfirmed(petId) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName); // Check if it redirects to Index action
+        }
+
+        [Test]
+        public void PetController_DeleteConfirmed_ValidPetId_RedirectsTo_Index()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _petController.DeleteConfirmed(petId) as RedirectToActionResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Index", result.ActionName);
+        }
+
+        [Test]
+        public void PetController_Delete_InvalidPetId_NotFound()
+        {
+            // Arrange
+            var invalidPetId = 999;
+
+            // Act
+            var result = _petController.Delete(invalidPetId) as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void PetController_Index_ReturnsViewWithPetList()
+        {
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act
+            var result = _petController.Index() as ViewResult;
+            var model = result?.Model as List<Pet>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, model?.Count);
+        }
+
+        [Test]
+        public void PetAdoptionController_Post_Book_by_InvalidDurationInMinutes_ThrowsException()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            var petAdoption1 = new PetAdoption { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 130 }; // Set duration to 130 minutes
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act & Assert
+            var ex = Assert.Throws<PetPetAdoptionException>(() =>
+            {
+                _petAdoptionController.Book(petId, petAdoption1);
+            });
+
+            // Assert
+            Assert.AreEqual("PetAdoption duration cannot exceed 120 minutes", ex.Message);
+        }
+
+        [Test]
+        public void PetAdoptionController_Post_Book_ThrowsException_with_message()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            // Create a petAdoption with duration exceeding 120 minutes
+            var petAdoption1 = new PetAdoption { DurationInMinutes = 180 }; // Set duration to 180 minutes 
+
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+
+            // Act & Assert
+            var ex = Assert.Throws<PetPetAdoptionException>(() =>
+            {
+                _petAdoptionController.Book(petId, petAdoption1);
+            });
+
+            // Assert
+            Assert.AreEqual("PetAdoption duration cannot exceed 120 minutes", ex.Message); 
+        }
+
+        [Test]
+        public void PetAdoptionController_Details_by_InvalidPetAdoptionId_ReturnsNotFound()
+        {
+            // Arrange
+            var petAdoptionId = 1;
+
+            // Act
+            var result = _petAdoptionController.Details(petAdoptionId) as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void PetAdoption_Properties_PetAdoptionID_GetSetCorrectly()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption();
+
+            // Act
+            petAdoption.PetAdoptionID = 1;
+
+            // Assert
+            Assert.AreEqual(1, petAdoption.PetAdoptionID);
+        }
+
+        [Test]
+        public void PetAdoption_Properties_PetID_GetSetCorrectly()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption();
+
+            // Act
+            petAdoption.PetID = 2;
+
+            // Assert
+            Assert.AreEqual(2, petAdoption.PetID);
+        }
+
+        [Test]
+        public void PetAdoption_Properties_DurationInMinutes_GetSetCorrectly()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption();
+
+            petAdoption.DurationInMinutes = 90; // Example value
+
+            // Assert
+            Assert.AreEqual(90, petAdoption.DurationInMinutes);
+        }
+
+        [Test]
+        public void PetAdoption_Properties_PetAdoptionID_HaveCorrectDataTypes()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption();
+
+            // Assert
+            Assert.That(petAdoption.PetAdoptionID, Is.TypeOf<int>());
+        }
+
+        [Test]
+        public void PetAdoption_Properties_PetID_HaveCorrectDataTypes()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption
+            {
+                // Initialize PetID property with an appropriate value
+                PetID = 1
+            };
+            // Assert
+            Assert.That(petAdoption.PetID, Is.TypeOf<int>());
+        }
+
+        [Test]
+        public void PetAdoption_Properties_CustomerName_ContactNumber_DurationInMinutes_HaveCorrectDataTypes()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption
+            {
+                // Initialize properties with appropriate values
+                CustomerName = "John Doe",
+                ContactNumber = "1234567890",
+                DurationInMinutes = 60
+            };
+
+            // Assert
+            Assert.That(petAdoption.CustomerName, Is.TypeOf<string>());
+            Assert.That(petAdoption.ContactNumber, Is.TypeOf<string>());
+            Assert.That(petAdoption.DurationInMinutes, Is.TypeOf<int>());
+        }
+
+        [Test]
+        public void PetClassExists()
+        {
+            var pet = new Pet();
+
+            Assert.IsNotNull(pet);
+        }
+
+        [Test]
+        public void PetAdoptionClassExists()
+        {
+            var petAdoption = new PetAdoption();
+
+            Assert.IsNotNull(petAdoption);
+        }
+
+        [Test]
+        public void ApplicationDbContextContainsDbSetPetAdoptionProperty()
+        {
+            var propertyInfo = _dbContext.GetType().GetProperty("PetAdoptions");
+
+            Assert.IsNotNull(propertyInfo);
+            Assert.AreEqual(typeof(DbSet<PetAdoption>), propertyInfo.PropertyType);
+        }
+
+        [Test]
+        public void ApplicationDbContextContainsDbSetPetProperty()
+        {
+            var propertyInfo = _dbContext.GetType().GetProperty("Pets");
+
+            Assert.AreEqual(typeof(DbSet<Pet>), propertyInfo.PropertyType);
+        }
+
+        [Test]
+        public void Pet_Properties_GetSetCorrectly()
+        {
+            // Arrange
+            var pet = new Pet();
+
+            // Act
+            pet.PetID = 1;
+            pet.Name = "Kitty";
+
+            // Assert
+            Assert.AreEqual(1, pet.PetID);
+            Assert.AreEqual("Kitty", pet.Name);
+        }
+
+        [Test]
+        public void Pet_Properties_Age_GetSetCorrectly()
+        {
+            // Arrange
+            var pet = new Pet();
+
+            pet.Age = 10;
+
+            Assert.AreEqual(10, pet.Age);
+        }
+
+        [Test]
+        public void Pet_Properties_Availability_GetSetCorrectly()
+        {
+            // Arrange
+            var pet = new Pet();
+
+            pet.Availability = true;
+
+            Assert.IsTrue(pet.Availability);
+        }
+
+        [Test]
+        public void Pet_Properties_HaveCorrectDataTypes()
+        {
+            // Arrange
+            var pet = new Pet
+            {
+                // Initialize the Name property with a valid string value
+                Name = "Kitty"
+            };
+
+            // Assert
+            Assert.That(pet.PetID, Is.TypeOf<int>());
+            Assert.That(pet.Name, Is.TypeOf<string>());
+            Assert.That(pet.Age, Is.TypeOf<int>());
+            Assert.That(pet.Availability, Is.TypeOf<bool>());
+        }
 
 //         [Test]
-//         public void BookingController_Get_Book_by_partyHallId_ReturnsViewResult()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act
-//             var result = _bookingController.Book(partyHallId) as ViewResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//         }
-
-//         [Test]
-//         public void BookingController_Get_Book_by_InvalidPartyHallId_ReturnsNotFound()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-
-//             // Act
-//             var result = _bookingController.Book(partyHallId) as NotFoundResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//         }
-
-//         [Test]
-//         public void BookingController_Post_Book_ValidBooking_Success_Redirects_Details()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "1234567890", DurationInMinutes = 60 };
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act
-//             var result = _bookingController.Book(partyHallId, booking1) as RedirectToActionResult;
-//             var booking = _dbContext.Bookings.Include(b => b.PartyHall).FirstOrDefault();
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//             Assert.AreEqual("Details", result.ActionName);
-//             Assert.IsNotNull(booking);
-//             Assert.AreEqual(partyHallId, booking.PartyHall.PartyHallID);
-//             Assert.AreEqual("John Doe", booking.CustomerName);
-//             Assert.AreEqual("1234567890", booking.ContactNumber);
-//             Assert.AreEqual(60, booking.DurationInMinutes);
-//         }
-
-//         [Test]
-//         public void BookingController_Post_Book_by_InvalidPartyHallId_ReturnsNotFound()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 60 };
-
-//             // Act
-//             var result = _bookingController.Book(partyHallId, booking1) as NotFoundResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//         }
-
-//         [Test]
-//         public void PartyHallController_Delete_ValidPartyHallId_Success_Redirects_Delete()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act
-//             var result = _partyHallController.DeleteConfirmed(partyHallId) as RedirectToActionResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//             Assert.AreEqual("Index", result.ActionName); // Check if it redirects to Index action
-//         }
-
-//         [Test]
-//         public void PartyHallController_DeleteConfirmed_ValidPartyHallId_RedirectsTo_Index()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act
-//             var result = _partyHallController.DeleteConfirmed(partyHallId) as RedirectToActionResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//             Assert.AreEqual("Index", result.ActionName);
-//         }
-
-//         [Test]
-//         public void PartyHallController_Delete_InvalidPartyHallId_NotFound()
-//         {
-//             // Arrange
-//             var invalidPartyHallId = 999;
-
-//             // Act
-//             var result = _partyHallController.Delete(invalidPartyHallId) as NotFoundResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//         }
-
-//         [Test]
-//         public void PartyHallController_Index_ReturnsViewWithPartyHallList()
-//         {
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act
-//             var result = _partyHallController.Index() as ViewResult;
-//             var model = result?.Model as List<PartyHall>;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//             Assert.AreEqual(1, model?.Count);
-//         }
-
-//         [Test]
-//         public void BookingController_Post_Book_by_InvalidDurationInMinutes_ThrowsException()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 130 }; // Set duration to 130 minutes
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act & Assert
-//             var ex = Assert.Throws<PartyHallBookingException>(() =>
-//             {
-//                 _bookingController.Book(partyHallId, booking1);
-//             });
-
-//             // Assert
-//             Assert.AreEqual("Booking duration cannot exceed 120 minutes", ex.Message);
-//         }
-
-//         [Test]
-//         public void BookingController_Post_Book_ThrowsException_with_message()
-//         {
-//             // Arrange
-//             var partyHallId = 1;
-//             var partyHall = new PartyHall { PartyHallID = partyHallId, Name = "Party Hall 1", Capacity = 100, Availability = true };
-//             // Create a booking with duration exceeding 120 minutes
-//             var booking1 = new Booking { DurationInMinutes = 180 }; // Set duration to 180 minutes 
-
-//             _dbContext.PartyHalls.Add(partyHall);
-//             _dbContext.SaveChanges();
-
-//             // Act & Assert
-//             var ex = Assert.Throws<PartyHallBookingException>(() =>
-//             {
-//                 _bookingController.Book(partyHallId, booking1);
-//             });
-
-//             // Assert
-//             Assert.AreEqual("Booking duration cannot exceed 120 minutes", ex.Message); 
-//         }
-
-//         [Test]
-//         public void BookingController_Details_by_InvalidBookingId_ReturnsNotFound()
-//         {
-//             // Arrange
-//             var bookingId = 1;
-
-//             // Act
-//             var result = _bookingController.Details(bookingId) as NotFoundResult;
-
-//             // Assert
-//             Assert.IsNotNull(result);
-//         }
-
-//         [Test]
-//         public void Booking_Properties_BookingID_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var booking = new Booking();
-
-//             // Act
-//             booking.BookingID = 1;
-
-//             // Assert
-//             Assert.AreEqual(1, booking.BookingID);
-//         }
-
-//         [Test]
-//         public void Booking_Properties_PartyHallID_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var booking = new Booking();
-
-//             // Act
-//             booking.PartyHallID = 2;
-
-//             // Assert
-//             Assert.AreEqual(2, booking.PartyHallID);
-//         }
-
-//         [Test]
-//         public void Booking_Properties_DurationInMinutes_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var booking = new Booking();
-
-//             booking.DurationInMinutes = 90; // Example value
-
-//             // Assert
-//             Assert.AreEqual(90, booking.DurationInMinutes);
-//         }
-
-//         [Test]
-//         public void Booking_Properties_BookingID_HaveCorrectDataTypes()
-//         {
-//             // Arrange
-//             var booking = new Booking();
-
-//             // Assert
-//             Assert.That(booking.BookingID, Is.TypeOf<int>());
-//         }
-
-//         [Test]
-//         public void Booking_Properties_PartyHallID_HaveCorrectDataTypes()
-//         {
-//             // Arrange
-//             var booking = new Booking
-//             {
-//                 // Initialize PartyHallID property with an appropriate value
-//                 PartyHallID = 1
-//             };
-//             // Assert
-//             Assert.That(booking.PartyHallID, Is.TypeOf<int>());
-//         }
-
-//         [Test]
-//         public void Booking_Properties_CustomerName_ContactNumber_DurationInMinutes_HaveCorrectDataTypes()
-//         {
-//             // Arrange
-//             var booking = new Booking
-//             {
-//                 // Initialize properties with appropriate values
-//                 CustomerName = "John Doe",
-//                 ContactNumber = "1234567890",
-//                 DurationInMinutes = 60
-//             };
-
-//             // Assert
-//             Assert.That(booking.CustomerName, Is.TypeOf<string>());
-//             Assert.That(booking.ContactNumber, Is.TypeOf<string>());
-//             Assert.That(booking.DurationInMinutes, Is.TypeOf<int>());
-//         }
-
-//         [Test]
-//         public void PartyHallClassExists()
-//         {
-//             var partyHall = new PartyHall();
-
-//             Assert.IsNotNull(partyHall);
-//         }
-
-//         [Test]
-//         public void BookingClassExists()
-//         {
-//             var booking = new Booking();
-
-//             Assert.IsNotNull(booking);
-//         }
-
-//         [Test]
-//         public void ApplicationDbContextContainsDbSetBookingProperty()
-//         {
-//             var propertyInfo = _dbContext.GetType().GetProperty("Bookings");
-
-//             Assert.IsNotNull(propertyInfo);
-//             Assert.AreEqual(typeof(DbSet<Booking>), propertyInfo.PropertyType);
-//         }
-
-//         [Test]
-//         public void ApplicationDbContextContainsDbSetPartyHallProperty()
-//         {
-//             var propertyInfo = _dbContext.GetType().GetProperty("PartyHalls");
-
-//             Assert.AreEqual(typeof(DbSet<PartyHall>), propertyInfo.PropertyType);
-//         }
-
-//         [Test]
-//         public void PartyHall_Properties_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var partyHall = new PartyHall();
-
-//             // Act
-//             partyHall.PartyHallID = 1;
-//             partyHall.Name = "Party Hall 1";
-
-//             // Assert
-//             Assert.AreEqual(1, partyHall.PartyHallID);
-//             Assert.AreEqual("Party Hall 1", partyHall.Name);
-//         }
-
-//         [Test]
-//         public void PartyHall_Properties_Capacity_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var partyHall = new PartyHall();
-
-//             partyHall.Capacity = 100;
-
-//             Assert.AreEqual(100, partyHall.Capacity);
-//         }
-
-//         [Test]
-//         public void PartyHall_Properties_Availability_GetSetCorrectly()
-//         {
-//             // Arrange
-//             var partyHall = new PartyHall();
-
-//             partyHall.Availability = true;
-
-//             Assert.IsTrue(partyHall.Availability);
-//         }
-
-//         [Test]
-//         public void PartyHall_Properties_HaveCorrectDataTypes()
-//         {
-//             // Arrange
-//             var partyHall = new PartyHall
-//             {
-//                 // Initialize the Name property with a valid string value
-//                 Name = "Party Hall 1"
-//             };
-
-//             // Assert
-//             Assert.That(partyHall.PartyHallID, Is.TypeOf<int>());
-//             Assert.That(partyHall.Name, Is.TypeOf<string>());
-//             Assert.That(partyHall.Capacity, Is.TypeOf<int>());
-//             Assert.That(partyHall.Availability, Is.TypeOf<bool>());
-//         }
-
-// //         [Test]
-// // public void Search_NoMatch_ReturnsNoMatchMessage()
-// // {
-// //     // Arrange
-// //     var partyHalls = new List<PartyHall>
-// //     {
-// //         new PartyHall { PartyHallID = 1, Name = "Elegant Banquet Hall", Capacity = 100, Availability = true },
-// //         new PartyHall { PartyHallID = 2, Name = "Cozy Party Room", Capacity = 50, Availability = true }
-// //     };
-// //     _dbContext.PartyHalls.AddRange(partyHalls);
-// //     _dbContext.SaveChanges();
-
-// //     // Clear any existing TempData to ensure a clean test environment
-// //     _partyHallController.TempData.Clear();
-
-// //     // Act
-// //     var result = _partyHallController.Search("Grand Celebration Hall") as RedirectToActionResult;
-
-// //     // Assert
-// //     Assert.IsNotNull(result);
-// //     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
-// //     Assert.IsTrue(_partyHallController.TempData.ContainsKey("Message")); // Check if TempData contains key "Message"
-// //     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _partyHallController.TempData["Message"]); // Ensure proper message is set
-// // }
-
-// //     [Test]
-// // public void Search_NoMatch_ReturnsNoMatchMessage()
-// // {
-// //     // Arrange
-// //     var partyHalls = new List<PartyHall>
-// //     {
-// //         new PartyHall { PartyHallID = 1, Name = "Elegant Banquet Hall", Capacity = 100, Availability = true },
-// //         new PartyHall { PartyHallID = 2, Name = "Cozy Party Room", Capacity = 50, Availability = true },
-// //     };
-// //     _dbContext.PartyHalls.AddRange(partyHalls);
-// //     _dbContext.SaveChanges();
-
-// //     _partyHallController.TempData.Clear();
-
-// //     // Act
-// //     var result = _partyHallController.Search("Grand Celebration Hall") as RedirectToActionResult;
-
-// //     // Assert
-// //     Assert.IsNotNull(result);
-// //     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
-
-// //     // Check if TempData is not null and contains the expected message
-// //     Assert.IsTrue(_partyHallController.TempData.ContainsKey("Message"));
-// //     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _partyHallController.TempData["Message"]);
-// // }
-
-//     [Test]
-// public void Search_Matches_Exactly_ReturnsMatchingPartyHall()
+// public void Search_NoMatch_ReturnsNoMatchMessage()
 // {
 //     // Arrange
-//     var partyHalls = new List<PartyHall>
+//     var pets = new List<Pet>
 //     {
-//         new PartyHall { PartyHallID = 1, Name = "Elegant Banquet Hall", Capacity = 100, Availability = true },
-//         new PartyHall { PartyHallID = 2, Name = "Cozy Party Room", Capacity = 50, Availability = true },
-//         new PartyHall { PartyHallID = 3, Name = "Grand Celebration Hall", Capacity = 200, Availability = true },
-//         new PartyHall { PartyHallID = 4, Name = "Lavish Ballroom", Capacity = 150, Availability = true },
-//         new PartyHall { PartyHallID = 5, Name = "Rustic Barn Venue", Capacity = 80, Availability = true }
+//         new Pet { PetID = 1, Name = "Elegant Banquet Hall", Type = "Dog", Age = 2, Availability = true },
+//         new Pet { PetID = 2, Name = "Cozy Party Room", Age = 50, Availability = true }
 //     };
-//     _dbContext.PartyHalls.AddRange(partyHalls);
+//     _dbContext.Pets.AddRange(pets);
 //     _dbContext.SaveChanges();
 
 //     // Clear any existing TempData to ensure a clean test environment
-//     // _partyHallController.TempData.Clear();
+//     _petController.TempData.Clear();
 
 //     // Act
-//     var result = _partyHallController.Search("Cozy Party Room") as ViewResult;
-//     var model = result.Model as List<PartyHall>;
+//     var result = _petController.Search("Grand Celebration Hall") as RedirectToActionResult;
 
 //     // Assert
 //     Assert.IsNotNull(result);
-//     Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
-//     Assert.IsNotNull(model); // Ensure the model is not null
-//     Assert.AreEqual(1, model.Count); // Ensure exactly one party hall is returned
-//     Assert.AreEqual("Cozy Party Room", model[0].Name); // Check that the returned party hall matches exactly
+//     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
+//     Assert.IsTrue(_petController.TempData.ContainsKey("Message")); // Check if TempData contains key "Message"
+//     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _petController.TempData["Message"]); // Ensure proper message is set
 // }
-//     }
+
+//     [Test]
+// public void Search_NoMatch_ReturnsNoMatchMessage()
+// {
+//     // Arrange
+//     var pets = new List<Pet>
+//     {
+//         new Pet { PetID = 1, Name = "Elegant Banquet Hall", Type = "Dog", Age = 2, Availability = true },
+//         new Pet { PetID = 2, Name = "Cozy Party Room", Age = 50, Availability = true },
+//     };
+//     _dbContext.Pets.AddRange(pets);
+//     _dbContext.SaveChanges();
+
+//     _petController.TempData.Clear();
+
+//     // Act
+//     var result = _petController.Search("Grand Celebration Hall") as RedirectToActionResult;
+
+//     // Assert
+//     Assert.IsNotNull(result);
+//     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
+
+//     // Check if TempData is not null and contains the expected message
+//     Assert.IsTrue(_petController.TempData.ContainsKey("Message"));
+//     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _petController.TempData["Message"]);
 // }
+
+    [Test]
+        public void PetController_Sort_By_Ascending_Age_ReturnsSortedPets()
+        {
+            // Arrange
+            var pets = new List<Pet>
+            {
+                new Pet { PetID = 1, Name = "Fluffy", Type = "Dog", Age = 2, Availability = true },
+                new Pet { PetID = 2, Name = "Buddy", Type = "Cat", Age = 15, Availability = true },
+                new Pet { PetID = 3, Name = "Max", Type = "Dog", Age = 8, Availability = true },
+                new Pet { PetID = 4, Name = "Milo", Type = "Parrot", Age = 4, Availability = true },
+                new Pet { PetID = 5, Name = "Luna", Type = "Rabbit", Age = 6, Availability = true }
+            };
+            _dbContext.Pets.AddRange(pets);
+            _dbContext.SaveChanges();
+            var methodName = SortByAgeAscending();
+            // Act
+            var result = _petController.methodName as ViewResult;
+            var model = result.Model as List<Pet>;
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
+            Assert.IsNotNull(model); // Ensure the model is not null
+            Assert.AreEqual(5, model.Count); // Ensure all pets are returned
+
+            // Check if pets are sorted by age in ascending order
+            Assert.AreEqual(2, model[0].Age); // Check the first pet's age
+            Assert.AreEqual(4, model[1].Age); // Check the second pet's age
+            Assert.AreEqual(6, model[2].Age); // Check the third pet's age
+            Assert.AreEqual(8, model[3].Age); // Check the fourth pet's age
+            Assert.AreEqual(15, model[4].Age); // Check the fifth pet's age
+        }
+    }
+}
