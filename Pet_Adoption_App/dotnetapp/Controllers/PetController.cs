@@ -24,11 +24,12 @@ namespace dotnetapp.Controllers
         public IActionResult Delete(int petId)
         {
             var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
+            Console.WriteLine("Delete");
             if (pet == null)
             {
                 return NotFound();
             }
-
+            Console.WriteLine("Viewing Pet");
             return View(pet);
         }
 
@@ -36,15 +37,17 @@ namespace dotnetapp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int petId)
         {
+            Console.WriteLine("Entered");
             var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
             if (pet == null)
             {
                 return NotFound();
             }
-
+            Console.WriteLine("Removed");
             _dbContext.Pets.Remove(pet);
+            Console.WriteLine("Saved Changes");
             _dbContext.SaveChanges();
-
+            Console.WriteLine("Returning to Index");
             return RedirectToAction(nameof(Index));
         }
 
