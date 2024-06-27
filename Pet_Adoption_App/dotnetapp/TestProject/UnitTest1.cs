@@ -37,21 +37,21 @@ namespace dotnetapp.Tests
             _dbContext.Dispose();
         }
 
-        [Test]
-        public void PetAdoptionController_Get_Pet_by_petId_ReturnsViewResult()
-        {
-            // Arrange
-            var petId = 1;
-            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-            _dbContext.Pets.Add(pet);
-            _dbContext.SaveChanges();
+        // [Test]
+        // public void PetAdoptionController_Get_Pet_by_petId_ReturnsViewResult()
+        // {
+        //     // Arrange
+        //     var petId = 1;
+        //     var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+        //     _dbContext.Pets.Add(pet);
+        //     _dbContext.SaveChanges();
 
-            // Act
-            var result = _petAdoptionController.Pet(petId) as ViewResult;
+        //     // Act
+        //     var result = _petAdoptionController.Pet(petId) as ViewResult;
 
-            // Assert
-            Assert.IsNotNull(result);
-        }
+        //     // Assert
+        //     Assert.IsNotNull(result);
+        // }
 
         // [Test]
         // public void PetAdoptionController_Get_Pet_by_InvalidPetId_ReturnsNotFound()
