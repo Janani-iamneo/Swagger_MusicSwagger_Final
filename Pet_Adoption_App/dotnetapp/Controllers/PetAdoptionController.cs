@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using dotnetapp.Models;
 using dotnetapp.Data;
 
+
 namespace dotnetapp.Controllers
 {
     public class PetAdoptionController : Controller
@@ -32,6 +33,7 @@ namespace dotnetapp.Controllers
         public IActionResult PetAdopter(PetAdoption adoption)
         {
             var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == adoption.PetID);
+            Console.WriteLine("entered");
             if (pet == null)
             {
                 return NotFound();
@@ -39,12 +41,14 @@ namespace dotnetapp.Controllers
 
             if (!pet.Availability)
             {
+                Console.WriteLine("!pet");
                 ModelState.AddModelError(string.Empty, "The selected pet is not available for adoption.");
                 return View(adoption);
             }
 
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("!ModelState");
                 return View(adoption);
             }
 

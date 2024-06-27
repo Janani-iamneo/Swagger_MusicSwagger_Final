@@ -12,6 +12,6 @@ namespace dotnetapp.Models
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public int PetID { get; set; }
-        public Pet Pet { get; set; }
+        public Pet? Pet { get; set; }
     }
 }
