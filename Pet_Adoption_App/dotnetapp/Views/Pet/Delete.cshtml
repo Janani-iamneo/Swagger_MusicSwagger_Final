@@ -3,8 +3,8 @@
 <h1>Delete Pet</h1>
 
 <p>Are you sure you want to delete pet '@Model.Name'?</p>
-
-<form asp-action="DeleteConfirmed" asp-route-petId="@Model.PetID" method="post">
+@* asp-action="DeleteConfirmed" asp-route-petId="@Model.PetID" *@
+<form  method="post">
     <input type="submit" value="Delete" class="btn btn-danger" />
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
