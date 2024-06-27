@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using dotnetapp.Exceptions;
 using dotnetapp.Models;
 using dotnetapp.Data;
 
@@ -21,71 +19,55 @@ namespace dotnetapp.Controllers
         public IActionResult PetAdopter(int petId)
         {
             var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
-
             if (pet == null)
             {
                 return NotFound();
             }
-            
-            return View();
+
+            var adoption = new PetAdoption { PetID = petId };
+            return View(adoption);
         }
 
         [HttpPost]
-        public IActionResult PetAdopter(int petId, PetAdopter adopter)
+        public IActionResult PetAdopter(PetAdoption adoption)
         {
-            try
-            { 
-                var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
-
-                if (pet == null)
-                {
-                    return NotFound();
-                }
-
-                // Check if the pet is available for adoption
-                if (!pet.Availability)
-                {
-                    throw new PetAdoptionException("The selected pet is not available for adoption.");
-                }
-
-                // Assign Pet ID to the adopter
-                adopter.PetID = petId;
-
-                if (!ModelState.IsValid)
-                {
-                    return View(adopter);
-                }
-
-                // Mark the pet as adopted
-                pet.Availability = false;
-                _dbContext.SaveChanges();
-
-                // Add adopter to the database
-                _dbContext.PetAdopters.Add(adopter);
-                _dbContext.SaveChanges();
-
-                // Redirect to adoption details page
-                return RedirectToAction("Details", new { adopterId = adopter.PetAdopterID });
-            }
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                throw;
-            }
-        }
-
-        public IActionResult Details(int adopterId)
-        {
-            var adopter = _dbContext.PetAdopters
-                .Include(a => a.Pet)
-                .FirstOrDefault(a => a.PetAdopterID == adopterId);
-
-            if (adopter == null)
+            var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == adoption.PetID);
+            if (pet == null)
             {
                 return NotFound();
             }
 
-            return View(adopter);
+            if (!pet.Availability)
+            {
+                ModelState.AddModelError(string.Empty, "The selected pet is not available for adoption.");
+                return View(adoption);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(adoption);
+            }
+
+            pet.Availability = false;
+            _dbContext.Pets.Update(pet);
+            _dbContext.PetAdoptions.Add(adoption);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Details", new { adopterId = adoption.PetAdopterID });
+        }
+
+        public IActionResult Details(int adopterId)
+        {
+            var adoption = _dbContext.PetAdoptions
+                .Include(a => a.Pet)
+                .FirstOrDefault(a => a.PetAdopterID == adopterId);
+
+            if (adoption == null)
+            {
+                return NotFound();
+            }
+
+            return View(adoption);
         }
     }
 }

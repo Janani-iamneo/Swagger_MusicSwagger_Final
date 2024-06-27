@@ -52,23 +52,19 @@ namespace dotnetapp.Controllers
         {
             if (string.IsNullOrEmpty(name))
             {
-                // Handle case where name is null or empty
                 return RedirectToAction(nameof(Index));
             }
 
-            // Convert search string to lower case for case-insensitive comparison
             var lowerName = name.ToLower();
 
             var pets = _dbContext.Pets
-                .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%")) // Using EF.Functions.Like for wildcard search
+                .Where(p => EF.Functions.Like(p.Name.ToLower(), "%" + lowerName + "%"))
                 .ToList();
 
-            // Check if any pet names exactly match the search string
             var exactMatch = pets.FirstOrDefault(p => p.Name.ToLower() == lowerName);
 
             if (exactMatch == null)
             {
-                // Handle case where no exact match is found
                 TempData["Message"] = $"No pet found matching '{name}'.";
                 return RedirectToAction(nameof(Index));
             }

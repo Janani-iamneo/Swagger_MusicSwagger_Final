@@ -11,6 +11,6 @@ namespace dotnetapp.Models
         public string Type { get; set; }
         public int Age { get; set; }
         public bool Availability { get; set; }
-        public List<PetAdopter> PetAdopters { get; set; }
+        public List<PetAdoption> PetAdoptions { get; set; }
     }
 }

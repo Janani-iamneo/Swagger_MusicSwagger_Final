@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace dotnetapp.Models
 {
-    public class PetAdopter
+    public class PetAdoption
     {
         public int PetAdopterID { get; set; }
         public string Name { get; set; }

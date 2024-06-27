@@ -4,8 +4,10 @@
 
 <h2>Selected Pet: @Model.PetID</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("PetAdopter", "PetAdoption", FormMethod.Post))
 {
+    @Html.HiddenFor(model => model.PetID)
+
     <div style="margin-bottom: 15px;">
         <label for="adopterName" style="font-weight: bold;">Your Name:</label>
         @Html.TextBoxFor(model => model.Name, new { @class = "form-control", id = "adopterName"})
@@ -26,14 +28,8 @@
         @Html.TextBoxFor(model => model.Address, new { @class = "form-control", id = "adopterAddress"})
         @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
     </div>
-    @* <div style="margin-bottom: 15px;">
-        <label for="isApproved" style="font-weight: bold;">Approval Status:</label>
-        @Html.CheckBoxFor(model => model.IsApproved, new { @class = "form-control", id = "isApproved" })
-        @Html.ValidationMessageFor(model => model.IsApproved, "", new { @class = "text-danger" }) 
-    </div>*@
 
     <button id="submit" type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 8px 16px; cursor: pointer;">Adopt</button>
 }
 
 <a id="backtoindex" href="@Url.Action("Index", "Pet")">Back to Pet Adoption Listings</a>
-<br>

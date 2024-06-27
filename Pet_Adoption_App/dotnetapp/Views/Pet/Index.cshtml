@@ -8,7 +8,7 @@
 }
 
 <!-- Add search form -->
-<form asp-action="Search" asp-controller="PetAdoption" method="get">
+<form asp-action="Search" asp-controller="Pet" method="get">
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Search by name..." name="name">
         <div class="input-group-append">
@@ -20,7 +20,6 @@
 <table class="table">
     <thead>
         <tr>
-            @* <th>Pet ID</th> *@
             <th>Name</th>
             <th>Type</th>
             <th>Age</th>
@@ -32,7 +31,6 @@
         @foreach (var pet in Model)
         {
             <tr>
-                @* <td>@pet.PetID</td> *@
                 <td>@pet.Name</td>
                 <td>@pet.Type</td>
                 <td>@pet.Age</td>
@@ -49,12 +47,11 @@
                 <td>
                     @if (pet.Availability)
                     {
-                        @* <a id="adoptButton" href="@Url.Action("Adopt","PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a> *@
-                        <a id="adoptButton" href="@Url.Action("PetAdopter", "PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
+                        <a href="@Url.Action("PetAdopter", "PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
                     }
                     else if (pet.PetAdopters != null && pet.PetAdopters.Any())
                     {
-                        <a id="detailsButton" href="@Url.Action("Details","PetAdoption", new { adopterId = pet.PetAdopters.First().PetAdopterID })" class="btn btn-info">Details</a>
+                        <a href="@Url.Action("Details", "PetAdoption", new { adopterId = pet.PetAdopters.First().PetAdopterID })" class="btn btn-info">Details</a>
                     }
                 </td>
             </tr>
