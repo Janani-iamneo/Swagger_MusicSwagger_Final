@@ -1,4 +1,3 @@
-// PetAdopter.cs
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,6 +5,7 @@ namespace dotnetapp.Models
 {
     public class PetAdoption
     {
+        [Key]
         public int PetAdopterID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
