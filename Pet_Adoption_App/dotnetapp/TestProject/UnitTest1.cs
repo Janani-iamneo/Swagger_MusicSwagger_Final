@@ -37,21 +37,21 @@ namespace dotnetapp.Tests
             _dbContext.Dispose();
         }
 
-        // [Test]
-        // public void PetAdoptionController_Get_Pet_by_petId_ReturnsViewResult()
-        // {
-        //     // Arrange
-        //     var petId = 1;
-        //     var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-        //     _dbContext.Pets.Add(pet);
-        //     _dbContext.SaveChanges();
+        [Test]
+        public void PetAdoptionController_Get_Pet_by_petId_ReturnsViewResult()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
 
-        //     // Act
-        //     var result = _petAdoptionController.Pet(petId) as ViewResult;
+            // Act
+            var result = _petAdoptionController.Pet(petId) as ViewResult;
 
-        //     // Assert
-        //     Assert.IsNotNull(result);
-        // }
+            // Assert
+            Assert.IsNotNull(result);
+        }
 
         [Test]
         public void PetAdoptionController_Get_Details_by_InvalidPetId_ReturnsNotFound()
@@ -72,12 +72,12 @@ namespace dotnetapp.Tests
             // Arrange
             var petId = 1;
             var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-            var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567890", Address = "123 Elm St" };
+            var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567890", Address = "123 Elm St", PetID = petId }; // Make sure to set PetID
             _dbContext.Pets.Add(pet);
             _dbContext.SaveChanges();
 
             // Act
-            var result = _petAdoptionController.Details(petId, petAdoption1) as RedirectToActionResult;
+            var result = _petAdoptionController.PetAdopter(petAdoption1) as RedirectToActionResult;
             var petAdoption = _dbContext.PetAdoptions.Include(b => b.Pet).FirstOrDefault();
 
             // Assert
@@ -89,19 +89,20 @@ namespace dotnetapp.Tests
             Assert.AreEqual("1234567890", petAdoption.PhoneNumber);
         }
 
-        // [Test]
-        // public void PetAdoptionController_Post_Pet_by_InvalidPetId_ReturnsNotFound()
-        // {
-        //     // Arrange
-        //     var petId = 1;
-        //     var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567890", Address = "123 Elm St" };
 
-        //     // Act
-        //     var result = _petAdoptionController.Pet(petId, petAdoption1) as NotFoundResult;
+        [Test]
+        public void PetAdoptionController_Post_Pet_by_InvalidPetId_ReturnsNotFound()
+        {
+            // Arrange
+            var petId = 1;
+            var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567890", Address = "123 Elm St" };
 
-        //     // Assert
-        //     Assert.IsNotNull(result);
-        // }
+            // Act
+            var result = _petAdoptionController.PetAdopter(petAdoption1) as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
 
         [Test]
         public void PetController_Delete_ValidPetId_Success_Redirects_Delete()
