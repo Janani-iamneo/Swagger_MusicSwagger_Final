@@ -51,7 +51,10 @@
                     {
                         <a id="adoptButton" href="@Url.Action("Adopt","PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
                     }
-                    <a id="detailsButton" href="@Url.Action("Details","PetAdoption", new { adopterId = pet.PetAdopterID })" class="btn btn-info">Details</a>
+                    else if (pet.PetAdopters != null && pet.PetAdopters.Any())
+                    {
+                        <a id="detailsButton" href="@Url.Action("Details","PetAdoption", new { adopterId = pet.PetAdopters.First().PetAdopterID })" class="btn btn-info">Details</a>
+                    }
                 </td>
             </tr>
         }
