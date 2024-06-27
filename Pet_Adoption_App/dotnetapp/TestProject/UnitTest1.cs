@@ -47,11 +47,12 @@ namespace dotnetapp.Tests
             _dbContext.SaveChanges();
 
             // Act
-            var result = _petAdoptionController.Pet(petId) as ViewResult;
+            var result = _petAdoptionController.PetAdopter(petId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
         }
+
 
         [Test]
         public void PetAdoptionController_Get_Details_by_InvalidPetId_ReturnsNotFound()
@@ -181,7 +182,7 @@ namespace dotnetapp.Tests
         //     // Act & Assert
         //     var ex = Assert.Throws<PetAdoptionException>(() =>
         //     {
-        //         _petAdoptionController.Pet(petId, petAdoption1);
+        //         _petAdoptionController.PetAdopter(petAdoption1);
         //     });
 
         //     // Assert
@@ -249,17 +250,17 @@ namespace dotnetapp.Tests
             Assert.AreEqual(2, petAdoption.PetID);
         }
 
-        // [Test]
-        // public void PetAdoption_Properties_DurationInMinutes_GetSetCorrectly()
-        // {
-        //     // Arrange
-        //     var petAdoption = new PetAdoption();
+        [Test]
+        public void PetAdoption_Properties_Address_GetSetCorrectly()
+        {
+            // Arrange
+            var petAdoption = new PetAdoption();
 
-        //     petAdoption.DurationInMinutes = 90; // Example value
+            petAdoption.Address = "demo"; // Example value
 
-        //     // Assert
-        //     Assert.AreEqual(90, petAdoption.DurationInMinutes);
-        // }
+            // Assert
+            Assert.AreEqual("demo", petAdoption.Address);
+        }
 
         [Test]
         public void PetAdoption_Properties_PetAdopterID_HaveCorrectDataTypes()
@@ -390,88 +391,37 @@ namespace dotnetapp.Tests
             Assert.That(pet.Availability, Is.TypeOf<bool>());
         }
 
-//         [Test]
-// public void Search_NoMatch_ReturnsNoMatchMessage()
-// {
-//     // Arrange
-//     var pets = new List<Pet>
-//     {
-//         new Pet { PetID = 1, Name = "Elegant Banquet Hall", Type = "Dog", Age = 2, Availability = true },
-//         new Pet { PetID = 2, Name = "Cozy Party Room", Age = 50, Availability = true }
-//     };
-//     _dbContext.Pets.AddRange(pets);
-//     _dbContext.SaveChanges();
+    [Test]
+        public void PetController_Sort_By_Ascending_Age_ReturnsSortedPets()
+        {
+            // Arrange
+            var pets = new List<Pet>
+            {
+                new Pet { PetID = 1, Name = "Fluffy", Type = "Dog", Age = 2, Availability = true },
+                new Pet { PetID = 2, Name = "Buddy", Type = "Cat", Age = 15, Availability = true },
+                new Pet { PetID = 3, Name = "Max", Type = "Dog", Age = 8, Availability = true },
+                new Pet { PetID = 4, Name = "Milo", Type = "Parrot", Age = 4, Availability = true },
+                new Pet { PetID = 5, Name = "Luna", Type = "Rabbit", Age = 6, Availability = true }
+            };
+            _dbContext.Pets.AddRange(pets);
+            _dbContext.SaveChanges();
+            var methodName = SortByAgeAscending();
+            // Act
+            var result = _petController.methodName as ViewResult;
+            var model = result.Model as List<Pet>;
 
-//     // Clear any existing TempData to ensure a clean test environment
-//     _petController.TempData.Clear();
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
+            Assert.IsNotNull(model); // Ensure the model is not null
+            Assert.AreEqual(5, model.Count); // Ensure all pets are returned
 
-//     // Act
-//     var result = _petController.Search("Grand Celebration Hall") as RedirectToActionResult;
-
-//     // Assert
-//     Assert.IsNotNull(result);
-//     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
-//     Assert.IsTrue(_petController.TempData.ContainsKey("Message")); // Check if TempData contains key "Message"
-//     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _petController.TempData["Message"]); // Ensure proper message is set
-// }
-
-//     [Test]
-// public void Search_NoMatch_ReturnsNoMatchMessage()
-// {
-//     // Arrange
-//     var pets = new List<Pet>
-//     {
-//         new Pet { PetID = 1, Name = "Elegant Banquet Hall", Type = "Dog", Age = 2, Availability = true },
-//         new Pet { PetID = 2, Name = "Cozy Party Room", Age = 50, Availability = true },
-//     };
-//     _dbContext.Pets.AddRange(pets);
-//     _dbContext.SaveChanges();
-
-//     _petController.TempData.Clear();
-
-//     // Act
-//     var result = _petController.Search("Grand Celebration Hall") as RedirectToActionResult;
-
-//     // Assert
-//     Assert.IsNotNull(result);
-//     Assert.AreEqual("Index", result.ActionName); // Ensure it redirects to Index action
-
-//     // Check if TempData is not null and contains the expected message
-//     Assert.IsTrue(_petController.TempData.ContainsKey("Message"));
-//     Assert.AreEqual("Party hall 'Grand Celebration Hall' not found.", _petController.TempData["Message"]);
-// }
-
-    // [Test]
-    //     public void PetController_Sort_By_Ascending_Age_ReturnsSortedPets()
-    //     {
-    //         // Arrange
-    //         var pets = new List<Pet>
-    //         {
-    //             new Pet { PetID = 1, Name = "Fluffy", Type = "Dog", Age = 2, Availability = true },
-    //             new Pet { PetID = 2, Name = "Buddy", Type = "Cat", Age = 15, Availability = true },
-    //             new Pet { PetID = 3, Name = "Max", Type = "Dog", Age = 8, Availability = true },
-    //             new Pet { PetID = 4, Name = "Milo", Type = "Parrot", Age = 4, Availability = true },
-    //             new Pet { PetID = 5, Name = "Luna", Type = "Rabbit", Age = 6, Availability = true }
-    //         };
-    //         _dbContext.Pets.AddRange(pets);
-    //         _dbContext.SaveChanges();
-    //         var methodName = SortByAgeAscending();
-    //         // Act
-    //         var result = _petController.methodName as ViewResult;
-    //         var model = result.Model as List<Pet>;
-
-    //         // Assert
-    //         Assert.IsNotNull(result);
-    //         Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
-    //         Assert.IsNotNull(model); // Ensure the model is not null
-    //         Assert.AreEqual(5, model.Count); // Ensure all pets are returned
-
-    //         // Check if pets are sorted by age in ascending order
-    //         Assert.AreEqual(2, model[0].Age); // Check the first pet's age
-    //         Assert.AreEqual(4, model[1].Age); // Check the second pet's age
-    //         Assert.AreEqual(6, model[2].Age); // Check the third pet's age
-    //         Assert.AreEqual(8, model[3].Age); // Check the fourth pet's age
-    //         Assert.AreEqual(15, model[4].Age); // Check the fifth pet's age
-    //     }
+            // Check if pets are sorted by age in ascending order
+            Assert.AreEqual(2, model[0].Age); // Check the first pet's age
+            Assert.AreEqual(4, model[1].Age); // Check the second pet's age
+            Assert.AreEqual(6, model[2].Age); // Check the third pet's age
+            Assert.AreEqual(8, model[3].Age); // Check the fourth pet's age
+            Assert.AreEqual(15, model[4].Age); // Check the fifth pet's age
+        }
     }
 }
