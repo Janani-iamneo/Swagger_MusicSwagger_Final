@@ -18,7 +18,7 @@ namespace dotnetapp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Adopt(int petId)
+        public IActionResult PetAdopter(int petId)
         {
             var pet = _dbContext.Pets.FirstOrDefault(p => p.PetID == petId);
 
@@ -31,7 +31,7 @@ namespace dotnetapp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Adopt(int petId, PetAdopter adopter)
+        public IActionResult PetAdopter(int petId, PetAdopter adopter)
         {
             try
             { 
