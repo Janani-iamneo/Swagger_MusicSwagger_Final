@@ -58,7 +58,7 @@
                     {
                         <a href="@Url.Action("Details", "PetAdoption", new { adopterId = pet.PetAdoptions.First().PetAdopterID })" class="btn btn-info">Details</a>
                     }
-                    <a href="@Url.Action("Delete", "Pet", new { petId = pet.PetID })" class="btn btn-danger">Delete</a>
+                    <a href="@Url.Action("Delete", "Pet", new { petId = pet.PetID })" id = "delete" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

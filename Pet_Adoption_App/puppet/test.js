@@ -18,7 +18,7 @@ const puppeteer = require('puppeteer');
         const thElements = Array.from(document.querySelectorAll('table th'));
         return thElements.map(th => th.textContent.trim());
       });
-    console.log(headers);
+    // console.log(headers);
       if (headers[0] === 'Name' && headers[1] === 'Type' && headers[2] === 'Age' && headers[3] ==='Availability'){
         const rowCount = await page.$$eval('table tbody tr', rows => rows.length);
     // console.log(rowCount);
@@ -52,15 +52,15 @@ const puppeteer = require('puppeteer');
       await page2.waitForSelector('#adopterAddress ', { timeout: 2000 });
       const Message = await page2.$eval('h1', element => element.textContent.toLowerCase());
       // console.log("Message",Message);
-    if(Message.includes("adopt a pet")&&urlAfterClick.toLowerCase().includes('/petadoption/petAdopter'))
+    if(Message.includes("adopt a pet")&&urlAfterClick.toLowerCase().includes('/petadoption/petadopter'))
     {
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:success');
+    console.log('TESTCASE:Check_Successful_Navigation_to_PetAdopter_Page_and_Presence_of_Name_Email_Phone_Address_Elements:success');
     }    
     else{
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_PetAdopter_Page_and_Presence_of_Name_Email_Phone_Address_Elements:failure');
     }
     } catch (e) {
-      console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:failure');
+      console.log('TESTCASE:Check_Successful_Navigation_to_PetAdopter_Page_and_Presence_of_Name_Email_Phone_Address_Elements:failure');
     } 
 
 
@@ -81,22 +81,21 @@ const puppeteer = require('puppeteer');
       await page3.waitForSelector('#cancel', { timeout: 2000 });
       const Message1 = await page3.$eval('h1', element => element.textContent.toLowerCase());
       // console.log("Message", Message1);
-    if(Message1.includes("delete party hall") && urlAfterClick.toLowerCase().includes('/partyhall/delete'))
+    if(Message1.includes("delete pet") && urlAfterClick.toLowerCase().includes('/pet/delete'))
     {
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:success');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Pet_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:success');
     }    
     else{
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Pet_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:failure');
     }
 
     }
   catch(e){
-    console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Pet_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:failure');
   }
   
   finally{
     await page.close();
-    // await page1.close();
     await page2.close();
     await page3.close();
     await browser.close();
