@@ -173,7 +173,7 @@ namespace dotnetapp.Tests
             // Arrange
             var vehicleId = 1;
             var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
-            var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 130 }; // Set duration to 130 minutes
+            var booking1 = new Booking { CustomerName = "John Doe", ContactNumber = "123456789", DurationInMinutes = 300 }; // Set duration to 130 minutes
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
 

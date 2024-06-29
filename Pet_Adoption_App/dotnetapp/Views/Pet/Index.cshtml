@@ -52,7 +52,7 @@
                 <td>
                     @if (pet.Availability)
                     {
-                        <a href="@Url.Action("PetAdopter", "PetAdoption", new { petId = pet.PetID })" class="btn btn-primary">Adopt</a>
+                        <a href="@Url.Action("PetAdopter", "PetAdoption", new { petId = pet.PetID })"  id = "adopt" class="btn btn-primary">Adopt</a>
                     }
                     else if (pet.PetAdoptions != null && pet.PetAdoptions.Any())
                     {

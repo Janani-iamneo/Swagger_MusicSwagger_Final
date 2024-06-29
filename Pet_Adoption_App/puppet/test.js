@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
     const page = await browser.newPage();
     try{
       // await page.goto('https://api.example.com/');
-      await page.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page.setViewport({
         width:1200,
         height:1200,
@@ -18,8 +18,8 @@ const puppeteer = require('puppeteer');
         const thElements = Array.from(document.querySelectorAll('table th'));
         return thElements.map(th => th.textContent.trim());
       });
-    // console.log(headers);
-      if (headers[0] === 'Party Hall ID' && headers[1] === 'Name' && headers[2] === 'Capacity' && headers[3] ==='Availability'){
+    console.log(headers);
+      if (headers[0] === 'Name' && headers[1] === 'Type' && headers[2] === 'Age' && headers[3] ==='Availability'){
         const rowCount = await page.$$eval('table tbody tr', rows => rows.length);
     // console.log(rowCount);
         if (rowCount > 0) {      
@@ -38,20 +38,21 @@ const puppeteer = require('puppeteer');
 
     const page2 = await browser.newPage();
     try {
-      await page2.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page2.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page2.setViewport({
         width: 1200,
         height: 1200,
       });
-      await page2.waitForSelector('#bookButton', { timeout: 2000 });
-      await page2.click('#bookButton');
+      await page2.waitForSelector('#adopt', { timeout: 2000 });
+      await page2.click('#adopt');
       const urlAfterClick = page2.url();
-      await page2.waitForSelector('#customerName', { timeout: 2000 });
-      await page2.waitForSelector('#contactNumber', { timeout: 2000 });
-      await page2.waitForSelector('#durationInMinutes', { timeout: 2000 });
+      await page2.waitForSelector('#adopterName', { timeout: 2000 });
+      await page2.waitForSelector('#adopterEmail', { timeout: 2000 });
+      await page2.waitForSelector('#adopterPhone', { timeout: 2000 });
+      await page2.waitForSelector('#adopterAddress ', { timeout: 2000 });
       const Message = await page2.$eval('h1', element => element.textContent.toLowerCase());
       // console.log("Message",Message);
-    if(Message.includes("make a reservation")&&urlAfterClick.toLowerCase().includes('/booking/book'))
+    if(Message.includes("adopt a pet")&&urlAfterClick.toLowerCase().includes('/petadoption/petAdopter'))
     {
     console.log('TESTCASE:Check_Successful_Navigation_to_PartyHall_Reservation_Page_and_Presence_of_Name_Email_Phone_Elements:success');
     }    
@@ -66,7 +67,7 @@ const puppeteer = require('puppeteer');
   const page3 = await browser.newPage();
 
     try {        
-      await page3.goto('https://8081-fcebdccccdbcfacbdcbaeadbebabcdebdca.premiumproject.examly.io/');
+      await page3.goto('https://8081-fcebdccccd313955453ebabbcadeeefceacone.premiumproject.examly.io/');
       await page3.setViewport({
         width: 1200,
         height: 800,

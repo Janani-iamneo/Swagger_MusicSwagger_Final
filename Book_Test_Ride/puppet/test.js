@@ -19,7 +19,7 @@ const puppeteer = require('puppeteer');
         return thElements.map(th => th.textContent.trim());
       });
     // console.log(headers);
-      if (headers[0] === 'Vehicle ID' && headers[1] === 'Make' && headers[2] === 'Model' && headers[3] ==='Year'){
+      if (headers[0] === 'Make' && headers[1] === 'Model' && headers[2] === 'Year' && headers[3] ==='Availability'){
         const rowCount = await page.$$eval('table tbody tr', rows => rows.length);
     // console.log(rowCount);
         if (rowCount > 0) {      
