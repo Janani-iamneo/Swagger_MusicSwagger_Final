@@ -169,25 +169,27 @@ namespace dotnetapp.Tests
             Assert.AreEqual(1, model?.Count);
         }
 
-        // [Test]
-        // public void PetAdoptionController_Post_Pet_by_InvalidDurationInMinutes_ThrowsException()
-        // {
-        //     // Arrange
-        //     var petId = 1;
-        //     var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-        //     var petAdoption1 = new PetAdoption { Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567", Address = "123 Elm St" }; // Set duration to 130 minutes
-        //     _dbContext.Pets.Add(pet);
-        //     _dbContext.SaveChanges();
+        [Test]
+        public void PetAdoptionController_Post_PetAlreadyAdopted_ThrowsPetAdoptionException()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = false };
+            var petAdoption1 = new PetAdoption { PetID = petId, Name = "John Doe", Email = "demo@gmail.com", PhoneNumber = "1234567", Address = "123 Elm St" };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+            var controller = new PetAdoptionController(_dbContext);
 
-        //     // Act & Assert
-        //     var ex = Assert.Throws<PetAdoptionException>(() =>
-        //     {
-        //         _petAdoptionController.PetAdopter(petAdoption1);
-        //     });
+            // Act & Assert
+            var ex = Assert.Throws<PetAdoptionException>(() =>
+            {
+                controller.PetAdopter(petAdoption1);
+            });
 
-        //     // Assert
-        //     Assert.AreEqual("PetAdoption duration cannot exceed 120 minutes", ex.Message);
-        // }
+            // Assert
+            Assert.AreEqual("This pet has already been adopted", ex.Message);
+        }
+
 
         // [Test]
         // public void PetAdoptionController_Post_Pet_ThrowsException_with_message()
@@ -391,7 +393,7 @@ namespace dotnetapp.Tests
             Assert.That(pet.Availability, Is.TypeOf<bool>());
         }
 
-    [Test]
+        [Test]
         public void PetController_Sort_By_Ascending_Age_ReturnsSortedPets()
         {
             // Arrange
@@ -405,23 +407,23 @@ namespace dotnetapp.Tests
             };
             _dbContext.Pets.AddRange(pets);
             _dbContext.SaveChanges();
-            var methodName = SortByAgeAscending();
+
             // Act
-            var result = _petController.methodName as ViewResult;
+            var result = _petController.SortByAge() as ViewResult;
             var model = result.Model as List<Pet>;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(Index), result.ViewName); // Ensure it renders the Index view
-            Assert.IsNotNull(model); // Ensure the model is not null
-            Assert.AreEqual(5, model.Count); // Ensure all pets are returned
+            Assert.AreEqual("Index", result.ViewName); 
+            Assert.IsNotNull(model); 
+            Assert.AreEqual(5, model.Count); 
 
             // Check if pets are sorted by age in ascending order
-            Assert.AreEqual(2, model[0].Age); // Check the first pet's age
-            Assert.AreEqual(4, model[1].Age); // Check the second pet's age
-            Assert.AreEqual(6, model[2].Age); // Check the third pet's age
-            Assert.AreEqual(8, model[3].Age); // Check the fourth pet's age
-            Assert.AreEqual(15, model[4].Age); // Check the fifth pet's age
+            Assert.AreEqual(2, model[0].Age);
+            Assert.AreEqual(4, model[1].Age);
+            Assert.AreEqual(6, model[2].Age); 
+            Assert.AreEqual(8, model[3].Age);
+            Assert.AreEqual(15, model[4].Age);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using dotnetapp.Models;
 using dotnetapp.Data;
+using dotnetapp.Exceptions;
 
 
 namespace dotnetapp.Controllers
@@ -39,12 +40,17 @@ namespace dotnetapp.Controllers
                 return NotFound();
             }
 
+            // if (!pet.Availability)
+            // {
+            //     //Console.WriteLine("!pet");
+            //     ModelState.AddModelError(string.Empty, "The selected pet is not available for adoption.");
+            //     return View(adoption);
+            // }
             if (!pet.Availability)
             {
-                //Console.WriteLine("!pet");
-                ModelState.AddModelError(string.Empty, "The selected pet is not available for adoption.");
-                return View(adoption);
+                throw new PetAdoptionException("This pet has already been adopted");
             }
+
 
             if (!ModelState.IsValid)
             {
