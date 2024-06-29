@@ -191,27 +191,34 @@ namespace dotnetapp.Tests
         }
 
 
-        // [Test]
-        // public void PetAdoptionController_Post_Pet_ThrowsException_with_message()
-        // {
-        //     // Arrange
-        //     var petId = 1;
-        //     var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = true };
-        //     // Create a petAdoption with duration exceeding 120 minutes
-        //     var petAdoption1 = new PetAdoption { DurationInMinutes = 180 }; // Set duration to 180 minutes 
+       [Test]
+        public void PetAdoptionController_Post_PetAlreadyAdopted_ThrowsPetAdoptionException_with_message()
+        {
+            // Arrange
+            var petId = 1;
+            var pet = new Pet { PetID = petId, Name = "Kitty", Type = "Dog", Age = 2, Availability = false }; // Pet already adopted
+            var petAdoption1 = new PetAdoption
+            {
+                PetID = petId,
+                Name = "John Doe",
+                Email = "demo@gmail.com",
+                PhoneNumber = "1234567",
+                Address = "123 Elm St"
+            };
+            _dbContext.Pets.Add(pet);
+            _dbContext.SaveChanges();
+            var controller = new PetAdoptionController(_dbContext);
 
-        //     _dbContext.Pets.Add(pet);
-        //     _dbContext.SaveChanges();
+            // Act & Assert
+            var ex = Assert.Throws<PetAdoptionException>(() =>
+            {
+                controller.PetAdopter(petAdoption1);
+            });
 
-        //     // Act & Assert
-        //     var ex = Assert.Throws<PetPetAdoptionException>(() =>
-        //     {
-        //         _petAdoptionController.Pet(petId, petAdoption1);
-        //     });
+            // Assert
+            Assert.AreEqual("This pet has already been adopted", ex.Message);
+        }
 
-        //     // Assert
-        //     Assert.AreEqual("PetAdoption duration cannot exceed 120 minutes", ex.Message); 
-        // }
 
         [Test]
         public void PetAdoptionController_Details_by_InvalidPetAdoptionId_ReturnsNotFound()
