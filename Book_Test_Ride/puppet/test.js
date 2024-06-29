@@ -82,15 +82,15 @@ const puppeteer = require('puppeteer');
       // console.log("Message", Message1);
     if(Message1.includes("delete vehicle") && urlAfterClick.toLowerCase().includes('/vehicle/delete'))
     {
-    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:success');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:success');
     }    
     else{
-    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:failure');
     }
 
     }
   catch(e){
-    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h2_delete_cancel_Elements:failure');
+    console.log('TESTCASE:Check_Successful_Navigation_to_Vehicle_Deleting_Page_and_Presence_of_h1_delete_cancel_Elements:failure');
   }
   
   finally{
