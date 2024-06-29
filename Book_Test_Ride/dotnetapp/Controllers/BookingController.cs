@@ -49,10 +49,10 @@ namespace dotnetapp.Controllers
                 // Assign Vehicle ID to the booking
                 booking.VehicleID = vehicleId;
 
-                // Check if DurationInMinutes exceeds 120
-                if (booking.DurationInMinutes > 120)
+                // Check if DurationInMinutes exceeds 200
+                if (booking.DurationInMinutes > 200)
                 {
-                    throw new TestDriveBookingException("Booking duration cannot exceed 120 minutes");
+                    throw new TestDriveBookingException("Booking duration cannot exceed 200 minutes");
                 }
 
                 if (!ModelState.IsValid)

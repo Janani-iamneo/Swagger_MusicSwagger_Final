@@ -184,7 +184,7 @@ namespace dotnetapp.Tests
             });
 
             // Assert
-            Assert.AreEqual("Booking duration cannot exceed 120 minutes", ex.Message);
+            Assert.AreEqual("Booking duration cannot exceed 200 minutes", ex.Message);
         }
 
         [Test]
@@ -193,8 +193,8 @@ namespace dotnetapp.Tests
             // Arrange
             var vehicleId = 1;
             var vehicle = new Vehicle { VehicleID = vehicleId, Make =  "Vehicle 1", Model = "Model 1", Availability = true };
-            // Create a booking with duration exceeding 120 minutes
-            var booking1 = new Booking { DurationInMinutes = 180 }; // Set duration to 180 minutes 
+            // Create a booking with duration exceeding 200 minutes
+            var booking1 = new Booking { DurationInMinutes = 240 }; // Set duration to 240 minutes 
 
             _dbContext.Vehicles.Add(vehicle);
             _dbContext.SaveChanges();
@@ -206,7 +206,7 @@ namespace dotnetapp.Tests
             });
 
             // Assert
-            Assert.AreEqual("Booking duration cannot exceed 120 minutes", ex.Message); 
+            Assert.AreEqual("Booking duration cannot exceed 200 minutes", ex.Message); 
         }
 
         [Test]
