@@ -129,7 +129,11 @@ namespace dotnetapp.Tests
             var response = await _httpClient.DeleteAsync($"api/MusicRecord/{_testMusicRecord.MusicRecordId}");
 
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+
+            // Set the test music record to null since it has been deleted
+            _testMusicRecord = null;
         }
+
 
         [Test]
         public void Test_MusicRecordService_Exist()
@@ -172,11 +176,13 @@ namespace dotnetapp.Tests
         [TearDown]
         public async Task Cleanup()
         {
-            // Delete the test music record after each test case
             if (_testMusicRecord != null)
             {
                 var response = await _httpClient.DeleteAsync($"api/MusicRecord/{_testMusicRecord.MusicRecordId}");
-                response.EnsureSuccessStatusCode();
+                if (response.StatusCode != HttpStatusCode.NotFound)
+                {
+                    response.EnsureSuccessStatusCode();
+                }
             }
             _httpClient.Dispose();
         }
