@@ -10,8 +10,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add services for repositories and services
-builder.Services.AddScoped<MobilePhoneRepository>();
-builder.Services.AddScoped<IMobilePhoneService, MobilePhoneService>();
+builder.Services.AddScoped<MusicRecordRepository>();
+builder.Services.AddScoped<IMusicRecordService, MusicRecordService>();
 
 var app = builder.Build();
 
