@@ -4,12 +4,38 @@ using dotnetapp.Models;
 
 namespace dotnetapp.Repository
 {
-    public class MusicRecordRepository : IMusicRecordRepository
+    public class MusicRecordRepository
     {
-        private readonly List<MusicRecord> _musicRecords = new List<MusicRecord>
+        private static List<MusicRecord> _musicRecords = new List<MusicRecord>()
         {
-            new MusicRecord { MusicRecordId = 1, Artist = "Artist1", Album = "Album1", Genre = "Genre1", Price = 10.99m, StockQuantity = 5 },
-            new MusicRecord { MusicRecordId = 2, Artist = "Artist2", Album = "Album2", Genre = "Genre2", Price = 15.99m, StockQuantity = 3 }
+            new MusicRecord 
+            { 
+                MusicRecordId = 1, 
+                Artist = "The Beatles", 
+                Album = "Abbey Road", 
+                Genre = "Rock", 
+                Price = 19.99m, 
+                StockQuantity = 50 
+            },
+            new MusicRecord 
+            { 
+                MusicRecordId = 2, 
+                Artist = "Pink Floyd", 
+                Album = "The Dark Side of the Moon", 
+                Genre = "Progressive Rock", 
+                Price = 24.99m, 
+                StockQuantity = 35 
+            },
+            new MusicRecord 
+            { 
+                MusicRecordId = 3, 
+                Artist = "Michael Jackson", 
+                Album = "Thriller", 
+                Genre = "Pop", 
+                Price = 21.99m, 
+                StockQuantity = 45 
+            }
+            // Add more records as needed
         };
 
         public List<MusicRecord> GetAll() => _musicRecords;
