@@ -156,7 +156,11 @@ namespace dotnetapp.Tests
                 Assert.Fail($"Service {serviceName} does not exist.");
             }
 
-            object serviceInstance = Activator.CreateInstance(serviceType);
+            // Create a dummy repository instance to pass to the service constructor
+            Type repositoryType = _assembly.GetType($"dotnetapp.Repository.{MusicRecordRepositoryName}");
+            object repositoryInstance = Activator.CreateInstance(repositoryType);
+            object serviceInstance = Activator.CreateInstance(serviceType, repositoryInstance);
+
             Assert.IsNotNull(serviceInstance);
         }
 
