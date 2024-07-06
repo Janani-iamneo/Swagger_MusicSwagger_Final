@@ -124,7 +124,7 @@ namespace dotnetapp.Tests
         }
 
         [Test]
-        public async Task Test_DeleteMusicRecord_ValidId_ReturnsNoContent()
+        public async Task   ()
         {
             var response = await _httpClient.DeleteAsync($"api/MusicRecord/{_testMusicRecord.MusicRecordId}");
 
